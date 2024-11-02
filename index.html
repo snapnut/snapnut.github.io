@@ -1,0 +1,52 @@
+<script>
+// This was programmed by poom.
+// End
+</script>
+<title>KPT virtual school image loader</title>
+<h1>KPT virtual school image loader</h1>
+<p>Invalid IDs won't load.</p>
+<br>
+<label>Wear mask?</label>
+<input type="checkbox" id="mask"/>
+<br>
+<label>Student id</label>
+<input type="number" id="kptid"/>
+<br><br>
+<button onclick="loadbtn()">Load</button>
+<br>
+<img src="" id="img"/>
+<style>
+</style>
+<script>
+const msk=document.getElementById("mask")
+const sid=document.getElementById("kptid")
+const img=document.getElementById("img")
+if (!String.format) {
+  String.format = function(format) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return format.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number] 
+        : match
+      ;
+    });
+  };
+}
+function loadbtn()
+{
+	if (sid.value.toString().length!=5)
+	{
+		alert("Incorrent combinations of number!")
+		return
+	}
+	//alert(msk.value)
+	//alert(sid.value)
+	let hee=""
+	if (msk.checked)
+	{
+		hee="_M"
+	}
+	let url=String.format("https://www.virtualschool.club/imagesuser/X1947{0}/{1}.jpg",hee,sid.value)
+	img.src=url
+}
+</script>
