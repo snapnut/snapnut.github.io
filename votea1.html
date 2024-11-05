@@ -1,0 +1,39 @@
+<script src="thai.js"></script>
+<title>Vote A1</title>
+<meta name="description" content="??">
+<META NAME="robots" CONTENT="noindex,nofollow">
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+    
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCIgpohnFBElBY_mHphCU9FLvEEdAQ68fI",
+        authDomain: "snapnut-page.firebaseapp.com",
+        projectId: "snapnut-page",
+        storageBucket: "snapnut-page.firebasestorage.app",
+        messagingSenderId: "365998637564",
+        appId: "1:365998637564:web:49c6ab03a2f4f7a166f279"
+    };
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const docref=doc(db,"votes","votes")
+    const docsnp=await getDoc(docref)
+    
+    if (!docsnp.exists())
+    {
+        console.log("WTF")
+    }
+    else {
+        console.log(docsnp.getData())
+    }
+</script>
+
+
