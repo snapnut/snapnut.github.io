@@ -27,12 +27,12 @@
     const docref=doc(db,"votes","votes")
     const docsnp=await getDoc(docref)
     
-    if (!docsnp.exists())
+    if (docsnp.exists())
     {
-        console.log("WTF")
+        console.log(docsnp.getData())
     }
     else {
-        console.log(docsnp.getData())
+        console.log("WTF")
     }
 </script>
 
