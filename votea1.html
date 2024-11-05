@@ -3,44 +3,122 @@
 <meta name="description" content="??">
 <META NAME="robots" CONTENT="noindex,nofollow">
 
+<h1>
+    Vote for the better person.
+</h1>
+<p>you can spam the buttons lol<br>also counter server may be slow</p>
+<div id="buttons"></div>
+
 <script type="module">
-    const lst = {
+    const baseUrl = "https://api.counterapi.dev/v1/snapnut/votea1_"
+    let lst = {
         fuji: 0,
         namkang: 0,
         peem: 0,
         poom: 0,
     }
-
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
     
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyCIgpohnFBElBY_mHphCU9FLvEEdAQ68fI",
-        authDomain: "snapnut-page.firebaseapp.com",
-        projectId: "snapnut-page",
-        storageBucket: "snapnut-page.firebasestorage.app",
-        messagingSenderId: "365998637564",
-        appId: "1:365998637564:web:49c6ab03a2f4f7a166f279"
-    };
-    
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const docref=doc(db,"votes","votes")
-    const docsnp=await getDoc(docref)
-    
-    if (docsnp.exists())
-    {
-        console.log(docsnp.data())
+    async function reset() {
+        for(const key in lst)
+        {
+            let aa=`${baseUrl}${key}`
+            const res=await fetch(aa)
+            const d=await res.json()
+            console.log("CLEARED "+key)
+            for (let i = 0; i < d.count; i++)
+            {
+                let ab=`${baseUrl}${key}/down`
+                await fetch(ab)
+            }
+        }
     }
-    else {
-        console.log("WTF")
+    //*/
+
+    // Function to get the count for a specific key
+    async function getCount(key) {
+        try {
+            const response = await fetch(`${baseUrl}${key}`);
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data)
+                return data.count;  // Assuming `count` holds the current value
+            } else {
+                console.error(`Failed to fetch count for ${key}:`, response.statusText);
+            }
+        } catch (error) {
+            console.error(`Error fetching count for ${key}:`, error);
+        }
+        return 0;
     }
+
+    // Function to increment the count for a specific key using the `/up` endpoint
+    async function incrementCount(key) {
+        try {
+            const response = await fetch(`${baseUrl}${key}/up`);
+            if (response.ok) {
+                const data = await response.json();
+                updateButtonText(key, data.count);  // Update button with new count
+            } else {
+                console.error(`Failed to increment count for ${key}:`, response.statusText);
+            }
+        } catch (error) {
+            console.error(`Error incrementing count for ${key}:`, error);
+        }
+    }
+
+    // Update button text with the count value
+    function updateButtonText(key, count) {
+        document.getElementById(key).innerText = `VOTE FOR ${key.charAt(0).toUpperCase() + key.slice(1)}: ${count}`;
+    }
+
+    // Initialize all buttons and load initial counts
+    async function init() {
+        const buttonsDiv = document.getElementById('buttons');
+        for (const key in lst) {
+            // Create a button for each counter
+            const button = document.createElement('button');
+            button.id = key;
+            button.innerText = `Loading ${key}...`;
+            button.onclick = () => incrementCount(key);
+            
+            // Append the button to the container
+            buttonsDiv.appendChild(button);
+            buttonsDiv.appendChild(document.createElement("br"));
+
+            // Fetch the initial count and update button text
+            const initialCount = await getCount(key);
+            updateButtonText(key, initialCount);
+        }
+    }
+
+    let kd_k=0
+    let kd_y=0
+    let kd_z=0
+
+    function kd(e) {
+        let a=e.key
+        if (a==="k")
+            kd_k=1
+        if (a==="y")
+            kd_y=1
+        if (a==="z")
+            kd_z=1
+
+        if (kd_k&&kd_y&&kd_z)
+        {
+            const buttonsDiv = document.getElementById('buttons');
+            buttonsDiv.appendChild(document.createElement("br"));
+            const b=document.createElement("button")
+            b.innerText="Reset"
+            b.onclick = () => {reset();location.reload()}
+            
+            buttonsDiv.append(b)
+        }
+    }
+
+    // Initialize on page load
+    window.onload = init;
+    window.onkeydown = kd;
 </script>
 
 
