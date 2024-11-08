@@ -15,6 +15,7 @@ function nega()
 }
 
 window.onfocus=nega
+window.onblur=nega
 window.onload=nega
 
 function raf(n)
