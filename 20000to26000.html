@@ -2,8 +2,8 @@
     let u = "https://www.virtualschool.club/imagesuser/X1947/";
     if (location.search.endsWith("mask"))
         u = "https://www.virtualschool.club/imagesuser/X1947_M/";
-    document.write("<style>.c{display:inline-block;width:auto;height:120px} .t{position: absolute;top: 8px;left: 16px;}</style>")
+    document.write("<style>img{display:inline-block;width:auto;height:120px}</style>")
     for (let index = 20000; index < 26000; index++) {
-        document.write(`<div class="c"><img src="${u}${index}.jpg" onerror="this.remove()"></img><div class="t">${index}</div></div>`)
+        document.write(`<img src="${u}${index}.jpg"onerror="this.remove()"alt="${index}"></img>`)
     }
 </script>
