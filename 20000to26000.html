@@ -2,9 +2,31 @@
     let u = "https://www.virtualschool.club/imagesuser/X1947/";
     if (location.search.endsWith("mask"))
         u = "https://www.virtualschool.club/imagesuser/X1947_M/";
-    document.write("<style>img{display:inline-block;width:auto;height:120px}</style>")
 
+    // Style for the image and the overlay container
+    document.write("<style>img {display: inline-block; width: auto; height: 120px;} .image-container {position: relative; display: inline-block; margin: 5px;} .text-overlay {position: absolute; top: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.5); color: white; text-align: center; padding: 10px; font-size: 16px; display: none;}</style>");
+
+    // Function to set overlay text for each image
+    function setOverlayText(imageElement, text) {
+        let overlay = imageElement.querySelector('.text-overlay');
+        overlay.textContent = text;  // Set the text content
+        overlay.style.display = 'block';  // Show the text
+    }
+
+    // Loop to generate images with overlays
     for (let index = 20000; index < 26000; index++) {
-        document.write(`<img src="${u}${index}.jpg" onerror="this.remove()"></img>`)
+        let imageUrl = `${u}${index}.jpg`;
+
+        // Create image container with overlay
+        document.write(`
+            <div class="image-container">
+                <img src="${imageUrl}" onerror="this.remove()">
+                <div class="text-overlay" id="overlay-${index}">Your message here!</div>
+            </div>
+        `);
+
+        // You can set different overlay text here using JavaScript
+        let imageElement = document.querySelector(`#overlay-${index}`).parentElement;
+        setOverlayText(imageElement, `${index}`);
     }
 </script>
