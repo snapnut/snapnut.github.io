@@ -1,0 +1,41 @@
+
+<h1>Thai to English Keyboard Layout Converter</h1>
+
+<label for="inputText">Enter Thai Keyboard Input:</label><br>
+<input type="text" id="inputText" placeholder="Type misrepresented thai here..." />
+<br>
+<button onclick="conv()">Convert</button>
+
+<h2>Output:</h2>
+<div id="output"></div>
+
+<script>
+  // Mapping from Thai to English characters (based on the previous mapping)
+  const fromtr = "ๅ/-ภถุึคตจขชฃๆไำพะัีรนยบลฟหกดเ้่าสวงผปแอิืทมใฝ";
+  const totr = "1234567890-=\\qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+
+  // Function to convert Thai keyboard input to English (QWERTY)
+  function conv() {
+    const inputText = document.getElementById('inputText').value;
+    let translatedText = '';
+
+    // Loop through each character in the input string
+    for (let i = 0; i < inputText.length; i++) {
+      let char = inputText[i];
+
+      // Find the index of the Thai character in the 'fromtr' string
+      let index = fromtr.indexOf(char);
+      
+      // If the character is found in 'fromtr', append the corresponding English character from 'totr'
+      if (index !== -1) {
+        translatedText += totr[index];
+      } else {
+        // If the character is not found in 'fromtr', keep it as is
+        translatedText += char;
+      }
+    }
+
+    // Display the translated text
+    document.getElementById('output').innerText = translatedText;
+  }
+</script>
