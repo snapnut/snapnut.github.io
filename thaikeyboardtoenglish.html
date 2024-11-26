@@ -1,5 +1,6 @@
-
-<h1>Thai to English Keyboard Layout Converter</h1>
+<script src="thai.js"></script>
+<h1>Misrepresented Thai converter</h1>
+<title>Misrepresented Thai converter</title>
 
 <label for="inputText">Enter Thai Keyboard Input:</label><br>
 <input type="text" id="inputText" placeholder="Type misrepresented thai here..." />
@@ -11,8 +12,9 @@
 
 <script>
   // Mapping from Thai to English characters (based on the previous mapping)
-  const fromtr = "ๅ/-ภถุึคตจขชฃๆไำพะัีรนยบลฟหกดเ้่าสวงผปแอิืทมใฝ";
-  const totr = "1234567890-=\\qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+  // no backslash fuck you
+  const fromtr = "ๅ/-ภถุึคตจขชๆไำพะัีรนยบลฟหกดเ้่าสวงผปแอิืทมใฝ";
+  const totr = "1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./";
 
   // Function to convert Thai keyboard input to English (QWERTY)
   function conv() {
