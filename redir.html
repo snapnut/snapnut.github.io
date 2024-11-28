@@ -10,8 +10,6 @@
     const urlParams = new URLSearchParams(window.location.search);
     const par = urlParams.get('redir');
 
-    let urlu = new URL(window.location.href)
-
     let url=document.getElementById("url")
     let cop=document.getElementById("copy")
 
@@ -19,8 +17,9 @@
         let urs = url.value
         let ub = btoa(urs)
 
-        urlu.searchParams.set("redir",ub)
-        copy(urlu.href())
+        let urlu = window.location.href
+        urlu += "?redir="+ub
+        copy(urlu)
     }
 
     if (par != null)
