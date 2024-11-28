@@ -20,6 +20,7 @@
         let ub = btoa(urs)
 
         urlu.searchParams.set("redir",ub)
+        copy(urlu.href())
     }
 
     if (par != null)
