@@ -1,0 +1,32 @@
+<script src="thai.js"></script>
+<title>Redirect tool</title>
+<meta name="robots" content="noindex,nofollow">
+
+<label for="url">Enter da URL</label><br>
+<input type="text" id="url" placeholder="URL to encode..." />
+<button id="copy">Copy link</button>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const par = urlParams.get('redir');
+
+    let urlu = new URL(window.location.href)
+
+    let url=document.getElementById("url")
+    let cop=document.getElementById("copy")
+
+    cop.onclick = () => {
+        let urs = url.value
+        let ub = btoa(urs)
+
+        urlu.searchParams.set("redir",ub)
+    }
+
+    if (par != null)
+    {
+        url.remove()
+        cop.remove()
+        let rp = atob(par)
+        window.location.replace(rp)
+    }
+</script>
