@@ -1,0 +1,11 @@
+<script>
+    var urlParams = window.location.search;
+
+    if (urlParams) {
+        urlParams = urlParams.substring(1);
+        document.write(urlParams);
+    } else {
+        document.write("No query/search appended. Add \"?<h1>Test</h1>\" without quotes, to the end of this URL and try refreshing.")
+    }
+
+</script>
