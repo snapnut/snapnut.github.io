@@ -3,9 +3,9 @@
 
     if (urlParams) {
         urlParams = urlParams.substring(1);
-        document.write(urlParams);
+        document.write(decodeURI(urlParams));
     } else {
-        document.write("No query/search appended. Add \"?<h1>Test</h1>\" without quotes, to the end of this URL and try refreshing.")
+        document.write("No query/search appended. Add \"?&lt;h1&gt;>Test&lt;/h1&gt;\" without quotes, to the end of this URL and try refreshing.")
     }
 
 </script>
