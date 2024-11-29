@@ -1,6 +1,7 @@
 <script>
     var urlParams = window.location.search;
 
+    document.currentScript.remove()
     if (urlParams) {
         urlParams = urlParams.substring(1);
         document.write(decodeURI(urlParams));
