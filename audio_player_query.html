@@ -24,8 +24,6 @@
 </head>
 <body>
     <div class="container">
-        <h1>Audio Player</h1>
-        <p>Provide a query in the URL to play audio (e.g., <code>site.html?https://www.itunes.com/sound.mp3</code>).</p>
         <audio id="audioPlayer" controls style="display: none;"></audio>
     </div>
 
@@ -46,10 +44,6 @@
                 // Display and play the audio
                 audioPlayer.style.display = 'block';
                 audioPlayer.load();
-                audioPlayer.play().catch(error => {
-                    console.error("Error playing audio:", error);
-                    alert("Unable to play the audio. Please check the link.");
-                });
             }
         } else {
             alert("No query found. Please provide a media link as a query (e.g., ?https://www.itunes.com/sound.mp3).");
