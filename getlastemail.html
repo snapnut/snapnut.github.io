@@ -1,0 +1,32 @@
+<script src="thai.js"></script>
+<h1>Get Last Email</h1>
+<label for="pwd">Password:</label>
+<input type="password" id="pwd" name="pwd">
+<button id="get">Get it</button>
+<pre id="content"></pre>
+<script>
+    const WORKER_URL = "https://gleworker.alvin9435xd-8db.workers.dev/?";
+
+    function setText(str) {
+        document.getElementById("content").textContent = str;
+    }
+
+    async function getData(params) {
+        let resp = fetch(WORKER_URL + new URLSearchParams({
+            pw: document.getElementById("pwd").textContent
+        }).toString())
+
+        if(!resp.ok) {
+            setText("Error. Status: " + resp.status);
+            return;
+        }
+
+        let txt = await resp.text();
+
+        setText(atob(atob(txt)));
+    }
+
+    document.getElementById("get").onclick = () => {
+        (async() => getData())();
+    }
+</script>
