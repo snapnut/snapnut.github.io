@@ -14,7 +14,7 @@
         document.getElementById("content").textContent = str;
     }
 
-    function fixTheBase64(b64) {
+    function fixTheBase64(binary) {
         const bytes = new Uint8Array(binary.length);
 
         for (let i = 0; i < binary.length; i++) {
