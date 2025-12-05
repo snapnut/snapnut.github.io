@@ -11,9 +11,9 @@
         document.getElementById("content").textContent = str;
     }
 
-    async function getData(params) {
+    async function getData(key) {
         let resp = fetch(WORKER_URL + new URLSearchParams({
-            pw: document.getElementById("pwd").textContent
+            pw: key
         }).toString())
 
         if(!resp.ok) {
@@ -27,6 +27,6 @@
     }
 
     document.getElementById("get").onclick = () => {
-        (async() => getData())();
+        (async() => getData(document.getElementById("pwd").textContent))();
     }
 </script>
