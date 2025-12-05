@@ -14,6 +14,16 @@
         document.getElementById("content").textContent = str;
     }
 
+    function fixTheBase64(b64) {
+        const binary = atob(b64);
+        const bytes = new Uint8Array(binary.length);
+
+        for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder("utf-8").decode(bytes);
+    }
+
     async function getData(key) {
         let resp = await fetch(WORKER_URL + new URLSearchParams({
             pw: key
@@ -26,7 +36,7 @@
 
         let txt = await resp.text();
 
-        setText(atob(atob(txt)));
+        setText(fixTheBase64(atob(atob(txt))));
     }
 
     document.getElementById("get").onclick = () => {
