@@ -27,7 +27,13 @@
     {
         url.remove()
         cop.remove()
-        let rp = atob(par)
-        window.location.replace(rp)
+        let rp = null
+        try {
+            rp = atob(par)
+        } catch (e) {
+            alert("fucked up redir -- bro just typing shit!!")
+        }
+        if (rp != null)
+            window.location.replace(rp)
     }
 </script>
