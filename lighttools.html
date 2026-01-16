@@ -1,0 +1,45 @@
+<script src="thai.js"></script>
+<link rel="stylesheet" href="normmain.css">
+<h1>Light Tools</h1>
+<!-- radio selections -->
+<div id="radioz"></div>
+<button onclick="runOption()">Get</button>
+
+<script>
+const options = [
+    "ALERT", "DIDLE"
+];
+const traz = [
+    "Alert", "Diddle"
+];
+const container = document.getElementById("radioz");
+
+let currd = options[0];
+let curri = 0;
+
+options.forEach((text, index) => {
+    const label = document.createElement("label");
+    const radio = document.createElement("input");
+
+    radio.type = "radio";
+    radio.name = "rg";   // SAME name = radio group
+    radio.value = traz[index];
+
+    if (index === 0) radio.checked = true; // optional default
+
+    label.appendChild(radio);
+    label.append(" " + traz[index]);
+
+    container.appendChild(label);
+    container.appendChild(document.createElement("br"));
+
+    radio.addEventListener("change", () => {
+        currd = text;
+        curri = index;
+    });
+});
+
+function runOption() {
+    alert("You selected: " + traz[curri] + " (" + currd + ")");
+}
+</script>
