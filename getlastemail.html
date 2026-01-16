@@ -29,7 +29,7 @@
         }).toString())
 
         if(!resp.ok) {
-            setText("Error. Status: " + resp.status);
+            setText("Error. Status: " + resp.status + ". Your password is surely wrong.");
             return;
         }
 
