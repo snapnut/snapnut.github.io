@@ -6,28 +6,24 @@ document.write(
 document.addEventListener("DOMContentLoaded", () => {
   const picmojis = document.querySelectorAll("[picmoji]");
 
-  document.addEventListener("touchstart", (e) => {
+  document.addEventListener("pointerdown", (e) => {
     picmojis.forEach((emoji) => {
       emoji.classList.remove("is-active");
     });
   });
 
-  // NOTE: touchstart and touchend happen on TAP! this means that touchend is called before the transition finishes, dimwit!
   picmojis.forEach((emoji) => {
-    emoji.addEventListener("touchstart", (e) => {
+    emoji.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return; 
+      
       emoji.classList.add("is-active");
-      // This is slow :(
-      if (emoji.style.transitionDelay !== "0s")
-        emoji.style.transitionDelay = "0s"; // This breaks when we switch between Desktop and Mobile in DevTools. But 'Desktop Mode' on mobile browsers reload the page!!
+      if (navigator.vibrate) navigator.vibrate(10);
     });
 
-    emoji.addEventListener("touchend", () => {
-      emoji.classList.remove("is-active");
-      navigator.vibrate(10);
-    });
+    const endInteraction = () => emoji.classList.remove("is-active");
 
-    emoji.addEventListener("touchcancel", () => {
-      emoji.classList.remove("is-active");
-    });
+    emoji.addEventListener("pointerup", endInteraction);
+    emoji.addEventListener("pointerleave", endInteraction);
+    emoji.addEventListener("pointercancel", endInteraction);
   });
 });
