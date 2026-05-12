@@ -17,19 +17,61 @@
 </head>
 <body>
     <canvas id="rainCanvas"></canvas>
-    <main class="content-panel">
-        <div class="header">
-            <h1 style="display:inline">Welcome to my site!</h1> <span>~B&F</span>
-        </div>
-        <br>
-        <p>This site is UNDER CONSTRUCTION! This does not represent a stable state of the site!</p>
-        <br>
-        <hr> <!-- har har har har-->
-        <br>
-        <h1>Status</h1>
-        <br>
-        <p>5/12/26 - The engine is started.</p>
-    </main>
+
+    <div class="app-container">
+        <nav class="sidebar" ta-center-mobile ta-right-desktop>
+            <div class="sidebar-header" ta-center-mobile>
+                <h2>Ramblings</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showView('home')">Home</a></li>
+                <li><a href="#" onclick="showView('updates')">Updates</a></li>
+                <li><a href="#" onclick="showView('projects')">Projects</a></li>
+                <li><a href="#" onclick="showView('credits')">Credits</a></li>
+            </ul>
+        </nav>
+
+        <main class="content-panel">
+            
+            <section id="home" class="view" style="display:none;">
+                <h1 ta-center>Welcome to my site!</h1>
+                <p ta-center>~B&F</p>
+                <br><hr><br>
+                <p>This site is UNDER CONSTRUCTION! This does not represent the final state of the site.</p>
+            </section>
+
+            <section id="updates" class="view" style="display:none;">
+                <h1>Updates</h1>
+                <br><hr><br>
+                <p>5/12/26 - The engine is started.</p>
+            </section>
+
+            <section id="projects" class="view" style="display:none;">
+                <h1>Projects</h1>
+                <br><hr><br>
+                <!-- test of long content -->
+                <p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p>
+                <p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p><p>Coming soon: P Diddy</p>
+            </section>
+
+            <section id="credits" class="view" style="display:none;">
+                <h1>Credits</h1>
+                <br><hr><br>
+                <p>Font: <a href="https://fonts.google.com/specimen/Outfit">Outfit</a></p>
+                <p>Design: me <img src="images/obamamedal.jpg" picmoji></p>
+            </section>
+
+        </main>
+    </div>
+
     <div id="media-bar" class="dock-bar is-hidden">
     <button class="dock-toggle-btn" onclick="toggleBar()" aria-label="Toggle Dock">
         <span id="toggle-icon">▲</span>
@@ -39,5 +81,9 @@
         <span>Now Playing: "We Are Charlie Kirk"</span>
     </div>
     </div>
+
+    <script>
+        showView('home');
+    </script>
 </body>
 </html>

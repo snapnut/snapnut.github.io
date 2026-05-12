@@ -1,6 +1,5 @@
 /* General Setup */
 * {
-  text-align: center;
   margin: 0;
   box-sizing: border-box;
 }
@@ -20,34 +19,71 @@
 
 .content-panel {
   position: relative;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-  
-  width: 90%;
-  max-width: 900px;
-  
+  flex: 1;
+  /* max-width: 1000px; */
   min-height: 100vh;
+  margin-right: 10vw;
+  min-width: 250px;
+  
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(2px);
-  
-  border-radius: 0 !important; 
   z-index: 1;
+  padding: 4rem;
   
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  /* The right border for PC */
+  border-right: 2px solid rgba(255, 255, 255, 0.1);
+
+  transition: margin-right 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              margin-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.5s ease;
 }
 
-@media (max-width: 768px) {
+/* Remove the peek on tight desktop screens */
+@media (aspect-ratio <= 1.6) {
+  .content-panel {
+    margin-right: 0;
+    border-right: none;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (width <= 600px) {
+  .app-container {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
   .content-panel {
     width: 100%;
-    margin-top: 10vh;
-    min-height: 90vh;
+    max-width: none;
+    margin-right: 0;
+    flex: none;
     
-    mask-image: linear-gradient(to bottom, transparent, black 15%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%);
+    /* 1. Reset margin and use padding instead */
+    margin-bottom: 0; 
+    padding-bottom: 35vh; /* Keep the 'rain' area visible via padding */
+    min-height: 100vh;
     
-    border-left: none;
     border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* 2. The Fade Mask */
+    /* This fades the container from solid to transparent starting at 70% height */
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 95%);
+    mask-image: linear-gradient(to bottom, black 70%, transparent 95%);
+    
+    /* 3. Ensure the mask doesn't clip content weirdly */
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -75,8 +111,8 @@
 .dock-toggle-btn {
   position: absolute;
   top: -30px;
-  left: 5%;
-  transform: translateX(-95%);
+  left: 30px;
+  transform: none;
   width: 60px;
   height: 30px;
   background: #1a1a1a;
@@ -98,7 +134,87 @@
   align-items: center;
 }
 
-@media (max-width: 600px) {
-  .dock-bar { height: 70px; }
-  .dock-toggle-btn { width: 50px; height: 25px; top: -25px; left: 50%; transform: translateX(-50%); }
+/* iPhone SE */
+@media (width <= 600px) {
+  .dock-bar {
+    height: 10vw;
+  }
+
+  .dock-toggle-btn {
+    width: 100px;
+    font-size: larger;
+  }
+}
+
+/* fix for iPad Mini. limits the max width because on desktop it goes to hell */
+@media (600px <= width <= 1000px) {
+  .dock-bar {
+    height: 70px;
+  }
+
+  .dock-toggle-btn {
+    width: 15vw;
+    height: 50px;
+    top: -50px;
+    font-size: larger;
+  }
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.sidebar {
+  width: 12.5vw;
+  min-width: 250px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  z-index: 10;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.nav-links li {
+  margin-bottom: 1.5rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: opacity 0.3s;
+  opacity: 0.7;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+  color: #00d4ff; /* A bit of flair */
+}
+
+/* Mobile Responsiveness */
+@media (width <= 600px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+  }
+  .nav-links {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+  }
 }

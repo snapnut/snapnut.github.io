@@ -3,8 +3,54 @@
 }
 
 body {
-    font-family: "Outfit", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+[picmoji] {
+  /*TODO: height makes it invisible?*/
+  height: 1.5em;
+  width: 1.5em;
+  width: auto;
+  vertical-align: middle;
+  display: inline-block;
+  
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1;
+}
+
+/* Desktop Hover & Mobile Active State */
+[picmoji]:hover, 
+[picmoji].is-active {
+  transform: scale(5);
+  z-index: 999;
+  transform-origin: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+[ta-center] {
+    text-align: center;
+}
+
+@media (width <= 600px) {
+    [ta-center-mobile] {
+        text-align: center;
+    }
+
+    [ta-right-mobile] {
+        text-align: right;
+    }
+}
+
+@media (600px >= width) {
+    [ta-center-desktop] {
+        text-align: center;
+    }
+
+    [ta-right-desktop] {
+        text-align: right;
+    }
 }
