@@ -10,25 +10,54 @@ body {
 }
 
 [picmoji] {
-  /*TODO: height makes it invisible?*/
+  width: var(--picmoji-width, auto);
   height: 1.5em;
-  width: 1.5em;
-  width: auto;
   vertical-align: middle;
   display: inline-block;
+  perspective: 1000px;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
   
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.5s ease-in-out, box-shadow 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
   z-index: 1;
 }
 
-/* Desktop Hover & Mobile Active State */
+[picmoji-hidden] {
+  opacity: 0;
+}
+
+[picmoji-overlap] {
+  position: absolute;
+}
+
+[picmoji][style*="--char-count"] {
+  --picmoji-width: calc(var(--char-count) * 1ch);
+  object-fit: contain;
+}
+
 [picmoji]:hover, 
 [picmoji].is-active {
-  transform: scale(5);
+  transform: scale(5) rotate3d(1, 0, 1, 360deg);
   z-index: 999;
   transform-origin: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  filter: drop-shadow(0px 20px 30px rgba(0,0,0,0.5));
+  transition-delay: 0.35s;
+  opacity: 1;
   position: relative;
+}
+
+[picmoji-overlap]:hover,
+[picmoji-overlap].is-active {
+  position: absolute;
+}
+
+[t-thickunderline] {
+  /*
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+  */
+  border-bottom: 2px solid currentColor;
 }
 
 [ta-center] {
@@ -45,7 +74,7 @@ body {
     }
 }
 
-@media (600px >= width) {
+@media (width >= 600px) {
     [ta-center-desktop] {
         text-align: center;
     }

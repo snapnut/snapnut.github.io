@@ -1,17 +1,17 @@
 let tod = 7;
-const todColors = [
-    { time: 0,   color: [8, 8, 8] },
-    { time: 5,  color: [38, 38, 38] },
-    { time: 5.5, color: [28, 74, 100] },
-    { time: 6.5, color: [54, 133, 179] },
-    { time: 12,  color: [52, 159, 167] },
-    { time: 15,  color: [52, 159, 167] },
-    { time: 17,  color: [180, 180, 190] },
-    { time: 18.5,  color: [38, 38, 38] },
-    { time: 23.9,   color: [13, 13, 13] },
-];
 
 {
+    const todColors = [
+        { time: 0,   color: [8, 8, 8] },
+        { time: 5,  color: [38, 38, 38] },
+        { time: 5.5, color: [28, 74, 100] },
+        { time: 6.5, color: [54, 133, 179] },
+        { time: 12,  color: [52, 159, 167] },
+        { time: 15,  color: [52, 159, 167] },
+        { time: 17,  color: [180, 180, 190] },
+        { time: 18.5,  color: [38, 38, 38] },
+        { time: 23.9,   color: [13, 13, 13] },
+    ];
     let canvas, ctx;
     let width, height, count;
     let posX, posY, vel, lengths, rotation, opacities;
