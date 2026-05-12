@@ -27,3 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
     emoji.addEventListener("pointercancel", endInteraction);
   });
 });
+
+function playSoundOneshot(src) {
+  const audio = new Audio(src);
+  audio.addEventListener("canplaythrough", () => {
+    audio.play();
+  });
+  return audio;
+}

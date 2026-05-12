@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="rain.css" />
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="https://pyscript.net/releases/2026.3.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
     <title>Butterscotch</title>
     <meta name="description" content="The site shall grace your eyes." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,6 +24,11 @@
   </head>
   <body>
     <canvas id="rainCanvas"></canvas>
+    <template id="sidepage-template">
+      <section>
+        <slot></slot>
+      </section>
+    </template>
 
     <div class="app-container">
       <nav class="sidebar" ta-center-mobile ta-right-desktop>
@@ -32,14 +39,40 @@
           <li><a href="#" onclick="showView('home')">Home</a></li>
           <li><a href="#" onclick="showView('updates')">Updates</a></li>
           <li><a href="#" onclick="showView('projects')">Projects</a></li>
-          <li><a href="#" onclick="showView('credits')">Credits</a></li>
+          <li><a href="#" onclick="showView('randoms')">Randoms</a></li>
+          <li><a href="#" onclick="showView('legal')">Legal</a></li>
         </ul>
+        <img
+          hide-on-mobile
+          onclick="madotsuki()"
+          style="
+            position: absolute;
+            bottom: 12.5%;
+            left: 50%;
+            transform: translateX(-50%);
+          "
+          src="images/madotchair.gif"
+          alt="Madotsuki spinning on the chair"
+        />
       </nav>
 
+      <img
+        hide-on-desktop
+        onclick="madotsuki()"
+        style="
+          position: fixed;
+          bottom: 5%;
+          left: 50%;
+          transform: translateX(-50%);
+        "
+        src="images/madotchair.gif"
+        alt="Madotsuki spinning on the chair"
+      />
+
       <main class="content-panel">
-        <section id="home" class="view" style="display: none">
+        <my-sidepage name="home">
           <h1>Welcome to Butterscotch!</h1>
-          <p>~B&F</p>
+          <p><i>~KuyNahee</i></p>
           <br />
           <hr />
           <br />
@@ -51,8 +84,8 @@
               picmoji-overlap
               picmoji-hidden
               style="--char-count: 17"
-            /><span t-thickunderline>UNDER CONSTRUCTION</span>! What you may see does not
-            represent the final state of the site.
+            /><span t-thickunderline>UNDER CONSTRUCTION</span>! What you may see
+            does not represent the final state of the site.
           </p>
           <br />
           <h1>What is this site?</h1>
@@ -61,7 +94,10 @@
           <br />
           <p>A place to look around.</p>
           <br />
-          <p>You can hover over 'picmojis' to see images hidden underneath.</p>
+          <p>
+            You can use 'picmojis' to see images at their full scale, or
+            unhidden.
+          </p>
           <p>
             Hover OR Tap --&gt;<img
               src="images/nikoface.webp"
@@ -70,9 +106,9 @@
             />
           </p>
           <p><small>Image credits: (C) Future Cat LLC.</small></p>
-        </section>
+        </my-sidepage>
 
-        <section id="updates" class="view" style="display: none">
+        <my-sidepage name="updates">
           <h1>Updates</h1>
           <br />
           <hr />
@@ -87,23 +123,26 @@
               style="--char-count: 2"
             /><span t-thickunderline>V2</span>.0 of Butterscotch!
           </p>
-        </section>
+        </my-sidepage>
 
-        <section id="projects" class="view" style="display: none">
+        <my-sidepage name="projects">
           <h1>Projects</h1>
           <br />
           <hr />
           <br />
           <p>Coming soon: Feelings</p>
-        </section>
+        </my-sidepage>
 
-        <section id="credits" class="view" style="display: none">
-          <h1>Credits</h1>
+        <my-sidepage name="legal">
+          <h1>Legal</h1>
           <br />
           <hr />
           <br />
           <p>
-            Font: <a href="https://fonts.google.com/specimen/Outfit">Outfit</a>
+            Font:
+            <a target="_blank" href="https://fonts.google.com/specimen/Outfit">Outfit</a> by
+            Smartsheet Inc, Rodrigo Fuenzalida. Distributed by Google as part of
+            the Google Fonts collection.
           </p>
           <p>
             Images: All over the Internet. Credits goes to the respective
@@ -111,10 +150,45 @@
           </p>
           <p>Design: me <img src="images/obamamedal.jpg" picmoji /></p>
           <br />
-          <p>This site does not use any heavy libraries. Isn't that cool?</p>
+          <p>This site does not use any heavy web frameworks. Isn't that cool?</p>
+          <p>Based on the technologies:</p>
+            <ul>
+                <li>HTML5</li>
+                <li>CSS3</li>
+                <li>JavaScript (ECMAScript 2020+)</li>
+                <li><a target="_blank" href="https://pyscript.net/">PyScript</a> (Do you know I suck at JavaScript?)</li>
+            </ul>
           <br />
           <p>No copyright infringement intended.</p>
-        </section>
+          <!-- this dont work rn
+          <p>You can contact the webadmin at <a target="_blank" href="mailto:contact@butterscotch.cc">contact@butterscotch.cc</a></p>
+              -->
+
+          <!-- This is too true !! -->
+          <p>
+            Made with <img src="images/monsterenergy.png" picmoji /> and ❤️.
+          </p>
+        </my-sidepage>
+
+        <my-sidepage name="randoms">
+          <h1>This page was made from boredom</h1>
+          <br />
+          <hr />
+          <br />
+          <script>
+            function random_roll() {
+              const wahwahwahwah = [
+                "?",
+                "you will get diddled by shrek💚"
+              ];
+              const ocElm = document.getElementById("random_roll_outcome");
+              const ridx = Math.floor(Math.random() * wahwahwahwah.length);
+              ocElm.textContent = wahwahwahwah[ridx];
+            }
+          </script>
+          <button onclick="random_roll()">Roll</button>
+          <p d-inline>thy outcome: <span id="random_roll_outcome"></span></p>
+        </my-sidepage>
       </main>
     </div>
 
@@ -132,19 +206,47 @@
       </div>
     </div>
 
+    <script type="mpy">
+        print(f"Hello! Do you know my name?")
+
+        import js
+    </script>
     <script>
       function setup() {}
 
-      function showView(viewId) {
-        const views = document.querySelectorAll(".view");
+      class SidePage extends HTMLElement {
+        constructor() {
+          super();
+          // Attach a Shadow DOM so styles don't leak out
+          const shadow = this.attachShadow({ mode: "open" });
+          const template = document.getElementById("sidepage-template");
 
-        views.forEach((view) => {
-          view.style.display = "none";
+          // Clone the template content into the shadow root
+          shadow.appendChild(template.content.cloneNode(true));
+        }
+
+        connectedCallback() {
+          console.log(`Sidepage ${this.getAttribute("name")} is ready to use.`);
+        }
+      }
+
+      // Register the component
+      customElements.define("my-sidepage", SidePage);
+
+      function showView(viewId) {
+        // 1. Find all sidepage elements
+        const pages = document.querySelectorAll("my-sidepage");
+
+        // 2. Hide all of them by removing an 'active' class
+        pages.forEach((page) => {
+          page.classList.remove("active");
         });
 
-        const targetView = document.getElementById(viewId);
+        // 3. Find the specific page with the matching name attribute
+        const targetView = document.querySelector(`my-sidepage[name="${viewId}"]`);
+
         if (targetView) {
-          targetView.style.display = "block";
+          targetView.classList.add("active");
         }
       }
 
@@ -153,6 +255,11 @@
         const icon = document.getElementById("toggle-icon");
         dock.classList.toggle("is-hidden");
         icon.innerText = dock.classList.contains("is-hidden") ? "▲" : "▼";
+      }
+
+      function madotsuki() {
+        let a = playSoundOneshot("sounds/madot.wav");
+        a.volume = 0.5;
       }
 
       if (document.readyState === "loading") {

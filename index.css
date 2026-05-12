@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-:is(h1, h2, h3, h4, h5, h6, p, strong, span, a) {
+:is(h1, h2, h3, h4, h5, h6, p, strong, span, a, ul) {
   color: white;
 }
 
@@ -15,6 +15,15 @@
   width: 100%;
   height: 100%;
   z-index: -1;
+}
+
+my-sidepage {
+  display: none;
+  width: 100%; 
+}
+
+my-sidepage.active {
+  display: block;
 }
 
 .content-panel {
@@ -137,9 +146,11 @@
 
 /* iPhone SE */
 @media (width <= 600px) {
+  /* i cant keep promises lol i need all that space
   .dock-bar {
     height: 10vw;
   }
+  */
 
   .dock-toggle-btn {
     width: 100px;

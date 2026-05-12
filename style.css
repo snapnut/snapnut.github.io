@@ -70,8 +70,16 @@ body {
   border-bottom: 2px solid currentColor;
 }
 
+[d-inline] {
+  display: inline;
+}
+
 [ta-center] {
   text-align: center;
+}
+
+[ta-right] {
+  text-align: right;
 }
 
 @media (width <= 600px) {
@@ -82,6 +90,10 @@ body {
   [ta-right-mobile] {
     text-align: right;
   }
+
+  [hide-on-mobile] {
+    display: none;
+  }
 }
 
 @media (width >= 600px) {
@@ -91,5 +103,9 @@ body {
 
   [ta-right-desktop] {
     text-align: right;
+  }
+
+  [hide-on-desktop] {
+    display: none;
   }
 }
