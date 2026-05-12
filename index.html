@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <script src="site.js"></script>
+    <script src="index.js"></script>
     <script src="rain.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="rain.css">
@@ -16,8 +17,27 @@
 </head>
 <body>
     <canvas id="rainCanvas"></canvas>
-    <p></p><h1 style="display:inline">Welcome to my site!</h1> ~B&F</p>
-    <br>
-    <p>This site is UNDER CONSTRUCTION! This does not represent a stable state of the site!</p>
+    <main class="content-panel">
+        <div class="header">
+            <h1 style="display:inline">Welcome to my site!</h1> <span>~B&F</span>
+        </div>
+        <br>
+        <p>This site is UNDER CONSTRUCTION! This does not represent a stable state of the site!</p>
+        <br>
+        <hr> <!-- har har har har-->
+        <br>
+        <h1>Status</h1>
+        <br>
+        <p>5/12/26 - The engine is started.</p>
+    </main>
+    <div id="media-bar" class="dock-bar is-hidden">
+    <button class="dock-toggle-btn" onclick="toggleBar()" aria-label="Toggle Dock">
+        <span id="toggle-icon">▲</span>
+    </button>
+    
+    <div class="dock-content">
+        <span>Now Playing: "We Are Charlie Kirk"</span>
+    </div>
+    </div>
 </body>
 </html>
