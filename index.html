@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <script src="site.js"></script>
-    <script src="index.js"></script>
     <script src="rain.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="rain.css">
@@ -83,6 +82,34 @@
     </div>
 
     <script>
+        function setup() {
+        }
+
+        function showView(viewId) {
+            const views = document.querySelectorAll('.view');
+            
+            views.forEach(view => {
+                view.style.display = 'none';
+            });
+
+            const targetView = document.getElementById(viewId);
+            if (targetView) {
+                targetView.style.display = 'block';
+            }
+        }
+
+        function toggleBar() {
+            const dock = document.getElementById('media-bar');
+            const icon = document.getElementById('toggle-icon');
+            dock.classList.toggle('is-hidden');
+            icon.innerText = dock.classList.contains('is-hidden') ? '▲' : '▼';
+        }
+
+        if (document.readyState === 'loading') {
+            window.addEventListener("DOMContentLoaded", setup);
+        } else {
+            setup();
+        }
         showView('home');
     </script>
 </body>
