@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.button !== 0) return; 
       
       emoji.classList.add("is-active");
-      if (navigator.vibrate) navigator.vibrate(10);
+      navigator?.vibrate?.(10);
     });
 
     const endInteraction = () => emoji.classList.remove("is-active");
