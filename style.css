@@ -20,6 +20,8 @@ body {
   
   transition: transform 0.5s ease-in-out, box-shadow 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
   z-index: 1;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 [picmoji-hidden] {

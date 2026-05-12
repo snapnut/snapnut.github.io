@@ -41,8 +41,10 @@
                 <h1>What is this site?</h1>
                 <br><hr><br>
                 <p>A place to look around.</p>
+                <br>
                 <p>You can hover over 'picmojis' to see images hidden underneath.</p>
-                <p>Hover OR Tap --&gt;<img src="images/nikoface.webp" picmoji></p>
+                <p>Hover OR Tap --&gt;<img src="images/nikoface.webp" alt="Niko OneShot's face" picmoji></p>
+                <p><small>Image credits: (C) Future Cat LLC.</small></p>
             </section>
 
             <section id="updates" class="view" style="display:none;">
@@ -90,12 +92,17 @@
             const views = document.querySelectorAll('.view');
             
             views.forEach(view => {
+                view.classList.remove('is-active');
                 view.style.display = 'none';
             });
 
             const targetView = document.getElementById(viewId);
             if (targetView) {
                 targetView.style.display = 'block';
+                
+                requestAnimationFrame(() => {
+                    targetView.classList.add('is-active');
+                });
             }
         }
 

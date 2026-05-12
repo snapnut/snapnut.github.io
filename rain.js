@@ -1,4 +1,4 @@
-let tod = 7;
+let tod = Math.random() * 24;
 
 {
     const todColors = [

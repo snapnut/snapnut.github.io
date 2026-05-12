@@ -6,13 +6,18 @@ document.write(
 document.addEventListener('DOMContentLoaded', () => {
   const picmojis = document.querySelectorAll('[picmoji]');
 
+  // NOTE: touchstart and touchend happen on TAP! this means that touchend is called before the transition finishes, dimwit!
   picmojis.forEach(emoji => {
     emoji.addEventListener('touchstart', (e) => {
-      emoji.classList.add('is-active');
+        emoji.classList.add('is-active');
+        // This is slow :(
+        if (emoji.style.transitionDelay !== '0s')
+                emoji.style.transitionDelay = '0s'; // This breaks when we switch between Desktop and Mobile in DevTools. But 'Desktop Mode' on mobile browsers reload the page!!
     });
 
     emoji.addEventListener('touchend', () => {
-      emoji.classList.remove('is-active');
+        emoji.classList.remove('is-active');
+        if (navigator.vibrate) navigator.vibrate(10);
     });
 
     emoji.addEventListener('touchcancel', () => {
