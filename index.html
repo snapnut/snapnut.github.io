@@ -1,124 +1,166 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <script src="site.js"></script>
     <script src="rain.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="rain.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="rain.css" />
+    <link rel="stylesheet" href="index.css" />
     <title>Butterscotch</title>
-    <meta name="description" content="The site shall grace your eyes.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-</head>
-<body>
+    <meta name="description" content="The site shall grace your eyes." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <canvas id="rainCanvas"></canvas>
 
     <div class="app-container">
-        <nav class="sidebar" ta-center-mobile ta-right-desktop>
-            <div class="sidebar-header" ta-center-mobile>
-                <h2>Butterscotch</h2>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#" onclick="showView('home')">Home</a></li>
-                <li><a href="#" onclick="showView('updates')">Updates</a></li>
-                <li><a href="#" onclick="showView('projects')">Projects</a></li>
-                <li><a href="#" onclick="showView('credits')">Credits</a></li>
-            </ul>
-        </nav>
+      <nav class="sidebar" ta-center-mobile ta-right-desktop>
+        <div class="sidebar-header" ta-center-mobile>
+          <h2>Butterscotch</h2>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#" onclick="showView('home')">Home</a></li>
+          <li><a href="#" onclick="showView('updates')">Updates</a></li>
+          <li><a href="#" onclick="showView('projects')">Projects</a></li>
+          <li><a href="#" onclick="showView('credits')">Credits</a></li>
+        </ul>
+      </nav>
 
-        <main class="content-panel">
-            
-            <section id="home" class="view" style="display:none;">
-                <h1>Welcome to Butterscotch!</h1>
-                <p>~B&F</p>
-                <br><hr><br>
-                <p> This site is <img src="images/underconstruction.png" picmoji picmoji-overlap picmoji-hidden style="--char-count: 17;"><span t-thickunderline>UNDER CONSTRUCTION</span>! This does not represent the final state of the site.</p>
-                <br>
-                <h1>What is this site?</h1>
-                <br><hr><br>
-                <p>A place to look around.</p>
-                <br>
-                <p>You can hover over 'picmojis' to see images hidden underneath.</p>
-                <p>Hover OR Tap --&gt;<img src="images/nikoface.webp" alt="Niko OneShot's face" picmoji></p>
-                <p><small>Image credits: (C) Future Cat LLC.</small></p>
-            </section>
+      <main class="content-panel">
+        <section id="home" class="view" style="display: none">
+          <h1>Welcome to Butterscotch!</h1>
+          <p>~B&F</p>
+          <br />
+          <hr />
+          <br />
+          <p>
+            This site is
+            <img
+              src="images/underconstruction.png"
+              picmoji
+              picmoji-overlap
+              picmoji-hidden
+              style="--char-count: 17"
+            /><span t-thickunderline>UNDER CONSTRUCTION</span>! This does not
+            represent the final state of the site.
+          </p>
+          <br />
+          <h1>What is this site?</h1>
+          <br />
+          <hr />
+          <br />
+          <p>A place to look around.</p>
+          <br />
+          <p>You can hover over 'picmojis' to see images hidden underneath.</p>
+          <p>
+            Hover OR Tap --&gt;<img
+              src="images/nikoface.webp"
+              alt="Niko OneShot's face"
+              picmoji
+            />
+          </p>
+          <p><small>Image credits: (C) Future Cat LLC.</small></p>
+        </section>
 
-            <section id="updates" class="view" style="display:none;">
-                <h1>Updates</h1>
-                <br><hr><br>
-                <p>5/12/26 - The engine is started. Welcome to <img src="images/v2uk.webp" picmoji picmoji-overlap picmoji-hidden style="--char-count: 5;"><span t-thickunderline>V2.0</span> of Butterscotch!</p>
-            </section>
+        <section id="updates" class="view" style="display: none">
+          <h1>Updates</h1>
+          <br />
+          <hr />
+          <br />
+          <p>
+            5/12/26 - The engine is started. Welcome to
+            <img
+              src="images/v2uk.webp"
+              picmoji
+              picmoji-overlap
+              picmoji-hidden
+              style="--char-count: 5"
+            /><span t-thickunderline>V2.0</span> of Butterscotch!
+          </p>
+        </section>
 
-            <section id="projects" class="view" style="display:none;">
-                <h1>Projects</h1>
-                <br><hr><br>
-                <p>Coming soon: Feelings</p>
-            </section>
+        <section id="projects" class="view" style="display: none">
+          <h1>Projects</h1>
+          <br />
+          <hr />
+          <br />
+          <p>Coming soon: Feelings</p>
+        </section>
 
-            <section id="credits" class="view" style="display:none;">
-                <h1>Credits</h1>
-                <br><hr><br>
-                <p>Font: <a href="https://fonts.google.com/specimen/Outfit">Outfit</a></p>
-                <p>Images: All over the Internet. Credits goes to the respective owners.</p>
-                <p>Design: me <img src="images/obamamedal.jpg" picmoji></p>
-                <br>
-                <p>This site does not use any heavy libraries. Isn't that cool?</p>
-                <br>
-                <p>No copyright infringement intended.</p>
-            </section>
-
-        </main>
+        <section id="credits" class="view" style="display: none">
+          <h1>Credits</h1>
+          <br />
+          <hr />
+          <br />
+          <p>
+            Font: <a href="https://fonts.google.com/specimen/Outfit">Outfit</a>
+          </p>
+          <p>
+            Images: All over the Internet. Credits goes to the respective
+            owners.
+          </p>
+          <p>Design: me <img src="images/obamamedal.jpg" picmoji /></p>
+          <br />
+          <p>This site does not use any heavy libraries. Isn't that cool?</p>
+          <br />
+          <p>No copyright infringement intended.</p>
+        </section>
+      </main>
     </div>
 
     <div id="media-bar" class="dock-bar is-hidden">
-    <button class="dock-toggle-btn" onclick="toggleBar()" aria-label="Toggle Dock">
+      <button
+        class="dock-toggle-btn"
+        onclick="toggleBar()"
+        aria-label="Toggle Dock"
+      >
         <span id="toggle-icon">▲</span>
-    </button>
-    
-    <div class="dock-content">
+      </button>
+
+      <div class="dock-content">
         <span>Now Playing: "We Are Charlie Kirk"</span>
-    </div>
+      </div>
     </div>
 
     <script>
-        function setup() {
-        }
+      function setup() {}
 
-        function showView(viewId) {
-            const views = document.querySelectorAll('.view');
-            
-            views.forEach(view => {
-                view.classList.remove('is-active');
-                view.style.display = 'none';
-            });
+      function showView(viewId) {
+        const views = document.querySelectorAll(".view");
 
-            const targetView = document.getElementById(viewId);
-            if (targetView) {
-                targetView.style.display = 'block';
-                
-                requestAnimationFrame(() => {
-                    targetView.classList.add('is-active');
-                });
-            }
-        }
+        views.forEach((view) => {
+          view.style.display = "none";
+        });
 
-        function toggleBar() {
-            const dock = document.getElementById('media-bar');
-            const icon = document.getElementById('toggle-icon');
-            dock.classList.toggle('is-hidden');
-            icon.innerText = dock.classList.contains('is-hidden') ? '▲' : '▼';
+        const targetView = document.getElementById(viewId);
+        if (targetView) {
+          targetView.style.display = "block";
         }
+      }
 
-        if (document.readyState === 'loading') {
-            window.addEventListener("DOMContentLoaded", setup);
-        } else {
-            setup();
-        }
-        showView('home');
+      function toggleBar() {
+        const dock = document.getElementById("media-bar");
+        const icon = document.getElementById("toggle-icon");
+        dock.classList.toggle("is-hidden");
+        icon.innerText = dock.classList.contains("is-hidden") ? "▲" : "▼";
+      }
+
+      if (document.readyState === "loading") {
+        window.addEventListener("DOMContentLoaded", setup);
+      } else {
+        setup();
+      }
+      showView("home");
     </script>
-</body>
+  </body>
 </html>

@@ -24,32 +24,19 @@
   min-height: 100vh;
   margin-right: 10vw;
   min-width: 250px;
-  
+
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(2px);
   z-index: 1;
   padding: 4rem;
-  
+
   /* The right border for PC */
   border-right: 2px solid rgba(255, 255, 255, 0.1);
 
-  transition: margin-right 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-              margin-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              padding 0.5s ease;
-}
-
-.view {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  display: none; /* Keep this so they don't take up space when inactive */
-}
-
-/* The class we will add via JS */
-.view.is-active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
+  transition:
+    margin-right 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    margin-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.5s ease;
 }
 
 /* Remove the peek on tight desktop screens */
@@ -72,12 +59,12 @@
     max-width: none;
     margin-right: 0;
     flex: none;
-    
+
     /* 1. Reset margin and use padding instead */
-    margin-bottom: 0; 
+    margin-bottom: 0;
     padding-bottom: 35vh; /* Keep the 'rain' area visible via padding */
     min-height: 100vh;
-    
+
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
@@ -85,7 +72,7 @@
     /* This fades the container from solid to transparent starting at 70% height */
     -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 95%);
     mask-image: linear-gradient(to bottom, black 70%, transparent 95%);
-    
+
     /* 3. Ensure the mask doesn't clip content weirdly */
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
@@ -114,7 +101,7 @@
   display: flex;
   align-items: center;
   padding: 0 20px;
-  box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
   padding-bottom: env(safe-area-inset-bottom);
 }
 
@@ -138,7 +125,7 @@
   justify-content: center;
   align-items: center;
   font-size: 12px;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .dock-content {

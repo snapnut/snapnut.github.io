@@ -17,8 +17,12 @@ body {
   perspective: 1000px;
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  
-  transition: transform 0.5s ease-in-out, box-shadow 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+
+  transition:
+    transform 0.5s ease-in-out,
+    box-shadow 0.5s ease,
+    opacity 0.5s ease,
+    filter 0.5s ease;
   z-index: 1;
   -webkit-touch-callout: none;
   user-select: none;
@@ -37,12 +41,12 @@ body {
   object-fit: contain;
 }
 
-[picmoji]:hover, 
+[picmoji]:hover,
 [picmoji].is-active {
   transform: scale(5) rotate3d(1, 0, 1, 360deg);
   z-index: 999;
   transform-origin: center;
-  filter: drop-shadow(0px 20px 30px rgba(0,0,0,0.5));
+  filter: drop-shadow(0px 20px 30px rgba(0, 0, 0, 0.5));
   transition-delay: 0.35s;
   opacity: 1;
   position: relative;
@@ -63,25 +67,25 @@ body {
 }
 
 [ta-center] {
-    text-align: center;
+  text-align: center;
 }
 
 @media (width <= 600px) {
-    [ta-center-mobile] {
-        text-align: center;
-    }
+  [ta-center-mobile] {
+    text-align: center;
+  }
 
-    [ta-right-mobile] {
-        text-align: right;
-    }
+  [ta-right-mobile] {
+    text-align: right;
+  }
 }
 
 @media (width >= 600px) {
-    [ta-center-desktop] {
-        text-align: center;
-    }
+  [ta-center-desktop] {
+    text-align: center;
+  }
 
-    [ta-right-desktop] {
-        text-align: right;
-    }
+  [ta-right-desktop] {
+    text-align: right;
+  }
 }
