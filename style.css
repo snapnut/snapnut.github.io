@@ -74,6 +74,10 @@ body {
   display: inline;
 }
 
+[ta-left] {
+  text-align: left;
+}
+
 [ta-center] {
   text-align: center;
 }
@@ -83,6 +87,10 @@ body {
 }
 
 @media (width <= 600px) {
+  [ta-left-mobile] {
+    text-align: left;
+  }
+
   [ta-center-mobile] {
     text-align: center;
   }
@@ -97,6 +105,10 @@ body {
 }
 
 @media (width >= 600px) {
+  [ta-left-desktop] {
+    text-align: left;
+  }
+  
   [ta-center-desktop] {
     text-align: center;
   }
