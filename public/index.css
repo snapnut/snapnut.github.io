@@ -213,20 +213,108 @@ my-sidepage.active {
   color: #00d4ff; /* A bit of flair */
 }
 
+.sidebar-toggle-btn {
+  display: none;
+}
+
 /* Mobile Responsiveness */
 @media (width <= 600px) {
   .app-container {
     flex-direction: column;
   }
+
   .sidebar {
+    position: static;
     width: 100%;
     height: auto;
-    position: relative;
-    padding: 1rem;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0;
+    z-index: 10;
   }
-  .nav-links {
+
+  .sidebar-header {
     display: flex;
-    justify-content: space-around;
-    margin-top: 1rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: transparent;
+  }
+
+  .sidebar-header h2 {
+    flex: 1;
+    margin: 0;
+    font-size: 1.3rem;
+  }
+
+  .sidebar-header p {
+    display: none;
+  }
+
+  .sidebar-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    order: -1;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .sidebar-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .sidebar-toggle-btn:active {
+    transform: scale(0.95);
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding: 6rem 2rem 2rem 2rem;
+    margin: 0;
+    list-style: none;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+  }
+
+  .sidebar.mobile-nav-open .nav-links {
+    transform: translateX(0);
+  }
+
+  .nav-links li {
+    margin: 0;
+  }
+
+  .nav-links a {
+    font-size: 1.4rem;
+    opacity: 1;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: #00d4ff;
   }
 }

@@ -44,16 +44,22 @@
           <p>
             <small><i>It's been so long.</i></small>
           </p>
+          <button class="sidebar-toggle-btn" onclick="toggleMobileNav()" type="button">
+            ☰
+          </button>
         </div>
         <ul class="nav-links">
-          <!-- TODO: why the fuck are we doing this manually -->
-          <li><a href="#" onclick="showView('home')">Home</a></li>
-          <li><a href="#" onclick="showView('updates')">Updates</a></li>
-          <li><a href="#" onclick="showView('projects')">Projects</a></li>
-          <li><a href="#" onclick="showView('randoms')">Randoms</a></li>
-          <li>
-            <a href="#" onclick="showView('legal-about')">Legal&#47;About</a>
-          </li>
+          <?
+          nav_items = [
+              ("home", "Home"),
+              ("updates", "Updates"),
+              ("projects", "Projects"),
+              ("randoms", "Randoms"),
+              ("legal-about", "Legal/About"),
+          ]
+          for view_id, label in nav_items:
+              print(f'<li><a href="#" onclick="showView(\'{view_id}\'); closeMobileNav()">{label}</a></li>', end="")
+          ?>
         </ul>
         <img
           hide-on-mobile
@@ -97,8 +103,8 @@
               picmoji-overlap
               picmoji-hidden
               style="--char-count: 17"
-            /><span t-thickunderline t-nonwrap>UNDER CONSTRUCTION</span>! What you may see
-            does not represent the final state of the site.
+            /><span t-thickunderline t-nonwrap>UNDER CONSTRUCTION</span>! What
+            you may see does not represent the final state of the site.
           </p>
           <br />
           <h1>What is this site?</h1>
@@ -127,7 +133,8 @@
           <hr />
           <br />
           <p>
-            5/13/26 - Arguably many more things today that you can go check out the code itself for an overview!!
+            5/13/26 - Arguably many more things today that you can go check out
+            the code itself for an overview!!
           </p>
           <p>
             5/12/26 - The engine is started. Welcome to
@@ -179,7 +186,14 @@
             </li>
             <li>Custom Python post-processor</li>
           </ul>
-          <p>You can check out the code of this site at <a target="_blank" href="https://github.com/snapnut/snapnut.github.io">GitHub</a>! Be warned, it won't always work on your device.</p>
+          <p>
+            You can check out the code of this site at
+            <a
+              target="_blank"
+              href="https://github.com/snapnut/snapnut.github.io"
+              >GitHub</a
+            >! Be warned, it won't always work on your device.
+          </p>
           <br />
           <p>This website is hosted on a 2010 laptop.</p>
           <p>It's going to be slow (even over Ethernet!). Here's the specs:</p>
@@ -188,7 +202,10 @@
             <li>RAM: 8GB DDR3</li>
             <li>GPU: Intel GMA</li>
           </ul>
-          <p>Status: <span id="server-stats"><?= get_stats()['status'] =?></span></p>
+          <p>
+            Status:
+            <span id="server-stats"><?= (await get_stats())['status'] ?></span>
+          </p>
           <br />
           <p>No copyright infringement intended.</p>
 
@@ -238,8 +255,7 @@
       import js
     </script>
     <script>
-      function setup() {
-      }
+      function setup() {}
 
       class SidePage extends HTMLElement {
         constructor() {
@@ -259,6 +275,16 @@
 
       // Register the component
       customElements.define("my-sidepage", SidePage);
+
+      function toggleMobileNav() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('mobile-nav-open');
+      }
+
+      function closeMobileNav() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.remove('mobile-nav-open');
+      }
 
       function showView(viewId) {
         const masterOfGitHubPages = document.querySelectorAll("my-sidepage");
