@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="index.css" />
     <title>Butterscotch</title>
     <meta name="description" content="The site shall grace your eyes." />
-    <link rel="icon" type="image/png" href="/icon.png">
+    <link rel="icon" type="image/png" href="/icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -37,22 +37,24 @@
           <p>
             <small><i>It's been so long.</i></small>
           </p>
-          <button class="sidebar-toggle-btn" onclick="toggleMobileNav()" type="button">
+          <button
+            class="sidebar-toggle-btn"
+            onclick="toggleMobileNav()"
+            type="button"
+          >
             ☰
           </button>
         </div>
         <ul class="nav-links">
-          <?
-          nav_items = [
-              ("home", "Home"),
-              ("updates", "Updates"),
-              ("projects", "Projects"),
-              ("randoms", "Randoms"),
-              ("legal-about", "Legal/About"),
-          ]
-          for view_id, label in nav_items:
-              print(f'<li><a href="#" onclick="showView(\'{view_id}\'); closeMobileNav()">{label}</a></li>', end="")
-          ?>
+          <? nav_items = [ ("home", "Home"), ("updates", "Updates"),
+          ("projects", "Projects"), ("randoms", "Randoms"), ("legal-about",
+          "Legal/About"), ] for view_id, label in nav_items: print(f'
+          <li>
+            <a href="#" onclick="showView(\'{view_id}\'); closeMobileNav()"
+              >{label}</a
+            >
+          </li>
+          ', end="") ?>
         </ul>
         <img
           hide-on-mobile
@@ -81,7 +83,7 @@
         alt="Madotsuki spinning on the chair"
       />
 
-      <main class="content-panel" style="overflow-x: hidden;">
+      <main class="content-panel" style="overflow-x: hidden">
         <my-sidepage name="home">
           <h1>Welcome to Butterscotch!</h1>
           <p><i>~KuyNahee</i></p>
@@ -123,14 +125,12 @@
         <my-sidepage name="updates">
           <h1>Updates</h1>
           <?
-          print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEY", end="")
-          ?>
+          print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEY",
+          end="") ?>
           <br />
           <hr />
           <br />
-          <p>
-            5/13/26 - Arguably many more things today!!
-          </p>
+          <p>5/13/26 - Arguably many more things today!!</p>
           <p>
             5/12/26 - The engine is started. Welcome to
             <img
@@ -149,6 +149,14 @@
           <hr />
           <br />
           <p>Coming soon: Feelings</p>
+          <p>
+            Script Bookmark:
+            <a
+              href="javascript:(function(){let s=document.createElement('style');s.innerHTML='*{user-select:auto!important;-webkit-user-select:auto!important;}';document.head.appendChild(s);const b=(e)=>e.stopImmediatePropagation();['selectbegin','selectstart','contextmenu','copy'].forEach(t=>document.addEventListener(t,b,true));})();"
+              target="_blank"
+              >Bypass copy&paste restrictions</a
+            >
+          </p>
         </my-sidepage>
 
         <my-sidepage name="legal-about">
@@ -263,13 +271,13 @@
       customElements.define("my-sidepage", SidePage);
 
       function toggleMobileNav() {
-        const sidebar = document.querySelector('.sidebar');
-        sidebar.classList.toggle('mobile-nav-open');
+        const sidebar = document.querySelector(".sidebar");
+        sidebar.classList.toggle("mobile-nav-open");
       }
 
       function closeMobileNav() {
-        const sidebar = document.querySelector('.sidebar');
-        sidebar.classList.remove('mobile-nav-open');
+        const sidebar = document.querySelector(".sidebar");
+        sidebar.classList.remove("mobile-nav-open");
       }
 
       function showView(viewId) {
