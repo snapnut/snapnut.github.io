@@ -76,6 +76,10 @@ body {
   display: inline;
 }
 
+[t-nonwrap] {
+  white-space: nowrap;
+}
+
 [ta-left] {
   text-align: left;
 }

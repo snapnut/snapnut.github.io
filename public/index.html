@@ -97,7 +97,7 @@
               picmoji-overlap
               picmoji-hidden
               style="--char-count: 17"
-            /><span t-thickunderline>UNDER CONSTRUCTION</span>! What you may see
+            /><span t-thickunderline t-nonwrap>UNDER CONSTRUCTION</span>! What you may see
             does not represent the final state of the site.
           </p>
           <br />
@@ -188,19 +188,13 @@
             <li>RAM: 8GB DDR3</li>
             <li>GPU: Intel GMA</li>
           </ul>
-          <p>Status: <span id="server-stats">Loading...</span></p>
+          <p>Status: <span id="server-stats"><?= get_stats()['status'] ?></span></p>
           <br />
           <p>No copyright infringement intended.</p>
 
           <!-- This is too true !! -->
           <p>
-            Made with <img src="images/monsterenergy.png" picmoji /> and
-            <img
-              src="images/ily.png"
-              picmoji
-              picmoji-hidden
-              picmoji-overlap
-            />❤️.
+            Made with <img src="images/monsterenergy.png" picmoji /> and ❤️.
           </p>
           <p><small>Build: {{DATE}} {{TIME}}</small></p>
         </my-sidepage>
@@ -245,13 +239,6 @@
     </script>
     <script>
       function setup() {
-        fetch("/api/stats")
-          .then((r) => r.json())
-          .then((data) => {
-            const el = document.getElementById("server-stats");
-            if (el)
-              el.innerText = data.status;
-          });
       }
 
       class SidePage extends HTMLElement {
