@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import sys
+from pathlib import Path
 from datetime import datetime, timezone
 
 # --- CONFIGURATION ---
@@ -46,6 +47,36 @@ def process_file(path):
     except Exception as e:
         print(f"Error processing {path}: {e}")
 
+# --- SIZE CHECKING LOGIC ---
+def is_binary(file_path):
+    # does it have a null byte
+    try:
+        with open(file_path, 'rb') as f:
+            chunk = f.read(1024)
+            return b'\x00' in chunk
+    except Exception:
+        return True
+
+def check_distribution_size():
+    total_bytes = 0
+    print("Site size")
+    print()
+    print(f"{'Bytes':<12} | {'File Path'}")
+    print()
+
+    # Walk through the generated build directory
+    for path in Path(BUILD_DIR).rglob('*'):
+        if path.is_file() and not is_binary(path):
+            try:
+                file_size = path.stat().st_size
+                total_bytes += file_size
+                print(f"{file_size:<12,} | {path}")
+            except Exception as e:
+                print(f"Error reading size for {path}: {e}")
+
+    print()
+    print(f"Site bytes: {total_bytes:,} bytes\n")
+
 # --- MAIN EXECUTION ---
 def main():
     # 1. Clean and Setup Dist
@@ -67,6 +98,7 @@ def main():
             if file.endswith('.html') or file.endswith('.js') or file.endswith('.css'):
                 process_file(os.path.join(root, file))
 
+    check_distribution_size()
     print("Ready for distribution!")
 
 if __name__ == "__main__":
