@@ -12,7 +12,7 @@ def get_count():
 now = datetime.now()
 syms = {
     'DATE':    lambda: now.strftime('%Y-%m-%d'),
-    'TIME':    lambda: now.strftime('%H:%M:%S'),
+    'TIME':    lambda: now.strftime('%H:%M:%S UTC'),
     'COUNTER': get_count,
 }
 
