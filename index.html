@@ -162,6 +162,15 @@
                 <li><a target="_blank" href="https://pyscript.net/">PyScript</a> (Do you know I suck at JavaScript?)</li>
             </ul>
           <br />
+          <p>This website is hosted on a 2010s laptop.</p>
+          <p>It's going to be slow. Here's the specs:</p>
+          <ul>
+            <li>CPU: Intel Core i5-560M</li>
+            <li>RAM: 8GB DDR3</li>
+            <li>Storage: 120GB SSD</li>
+            <li>GPU: Intel GMA</li>
+          </ul>
+          <br />
           <p>No copyright infringement intended.</p>
           <!-- this dont work rn
           <p>You can contact the webadmin at <a target="_blank" href="mailto:contact@butterscotch.cc">contact@butterscotch.cc</a></p>
@@ -205,7 +214,7 @@
       </button>
 
       <div class="dock-content">
-        <span>Now Playing: "We Are Charlie Kirk"</span>
+        <span>Now Playing: "We Are Ch****e K**k"</span>
       </div>
     </div>
 
@@ -237,19 +246,16 @@
       customElements.define("my-sidepage", SidePage);
 
       function showView(viewId) {
-        // 1. Find all sidepage elements
-        const pages = document.querySelectorAll("my-sidepage");
+        const masterOfGitHubPages = document.querySelectorAll("my-sidepage");
 
-        // 2. Hide all of them by removing an 'active' class
-        pages.forEach((page) => {
+        masterOfGitHubPages.forEach((page) => {
           page.classList.remove("active");
         });
 
-        // 3. Find the specific page with the matching name attribute
-        const targetView = document.querySelector(`my-sidepage[name="${viewId}"]`);
+        const datView = document.querySelector(`my-sidepage[name="${viewId}"]`);
 
-        if (targetView) {
-          targetView.classList.add("active");
+        if (datView) {
+          datView.classList.add("active");
         }
       }
 

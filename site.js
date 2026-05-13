@@ -1,3 +1,5 @@
+// TODO: put my shit in a namespace?
+
 document.write(
   `<script data-goatcounter="https://snapnut.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>`,
@@ -34,4 +36,22 @@ function playSoundOneshot(src) {
     audio.play();
   });
   return audio;
+}
+
+// This is so we can do fun shit that uses sounds/vibrations
+let interactedwiththesite = false;
+
+document.addEventListener("pointerdown", () => {
+  interactedwiththesite = true;
+});
+
+document.addEventListener("keydown", () => {
+  interactedwiththesite = true;
+});
+
+// no this isn't C
+// void main()
+
+function hasInteracted() {
+  return interactedwiththesite;
 }
