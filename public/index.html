@@ -187,7 +187,7 @@
             <li>RAM: 8GB DDR3</li>
             <li>GPU: Intel GMA</li>
           </ul>
-          <p>Laptop Status: <span id="server-stats">Loading...</span></p>
+          <p>Status: <span id="server-stats">Loading...</span></p>
           <br />
           <p>No copyright infringement intended.</p>
 
@@ -244,14 +244,6 @@
     </script>
     <script>
       function setup() {
-        const hash = location.hash.replace("#", "");
-        if (hash) {
-          showView(hash);
-        } else {
-          showView("home");
-        }
-
-        // Fetch Server Stats
         fetch("/api/stats")
           .then((r) => r.json())
           .then((data) => {
@@ -291,7 +283,6 @@
 
         if (datView) {
           datView.classList.add("active");
-          location.hash = viewId;
         }
       }
 
