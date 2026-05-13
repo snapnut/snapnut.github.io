@@ -10,11 +10,16 @@ body {
 }
 
 [picmoji] {
-  width: var(--picmoji-width, auto);
+  width: auto;
   /* WebKit hack! Force it to render high quality then render at low sizes! */
   /* 7.5em is 1.5em * 5 */
   /* 0.2 is 1/5, so it scales down to 1.5em! */
   height: 7.5em;
+  /* Fix because its like covid when it's used, everything flees it */
+  margin-top: -3em;
+  margin-bottom: -3em;
+  margin-left: -3em;
+  margin-right: -3em;
   transform: scale(0.2);
   vertical-align: middle;
   display: inline-block;
@@ -44,11 +49,6 @@ body {
 
 [picmoji-overlap] {
   position: absolute;
-}
-
-[picmoji][style*="--char-count"] {
-  --picmoji-width: calc(var(--char-count) * 1ch);
-  object-fit: contain;
 }
 
 [picmoji]:hover,
