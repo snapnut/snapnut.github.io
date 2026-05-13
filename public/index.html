@@ -46,15 +46,17 @@
           </button>
         </div>
         <ul class="nav-links">
-          <? nav_items = [ ("home", "Home"), ("updates", "Updates"),
-          ("projects", "Projects"), ("randoms", "Randoms"), ("legal-about",
-          "Legal/About"), ] for view_id, label in nav_items: print(f"""
-          <li>
-            <a href="#" onclick="showView(\'{view_id}\'); closeMobileNav()"
-              >{label}</a
-            >
-          </li>
-          """, end="") ?>
+          <!-- prettier-ignore -->
+          <?
+          nav_items = [
+            ("home", "Home"),
+            ("updates", "Updates"),
+            ("projects", "Projects"),
+            ("randoms", "Randoms"),
+            ("legal-about", "Legal/About"),
+          ]
+
+          for view_id, label in nav_items: print(f"""<li><a href="#" onclick="showView(\'{view_id}\'); closeMobileNav()">{label}</a></li>""", end="") ?>
         </ul>
         <img
           hide-on-mobile

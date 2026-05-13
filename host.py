@@ -84,7 +84,7 @@ class PyHPEngine:
         for match in self.TEMPLATE_TAG_RE.finditer(segment):
             raw_text = segment[last_pos:match.start()]
             if raw_text:
-                lines.append(f'    output.append({raw_text!r})')
+                lines.append(f'    output.append("""{raw_text!r}""")')
 
             expr_block = match.group(1)
             code_block = match.group(2)
