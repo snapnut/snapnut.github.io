@@ -11,8 +11,14 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="rain.css" />
     <link rel="stylesheet" href="index.css" />
-    <link rel="stylesheet" href="https://pyscript.net/releases/2026.3.1/core.css" />
-    <script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://pyscript.net/releases/2026.3.1/core.css"
+    />
+    <script
+      type="module"
+      src="https://pyscript.net/releases/2026.3.1/core.js"
+    ></script>
     <title>Butterscotch</title>
     <meta name="description" content="The site shall grace your eyes." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -35,7 +41,9 @@
       <nav class="sidebar" ta-center-mobile ta-right-desktop>
         <div class="sidebar-header" ta-center-mobile>
           <h2>Butterscotch</h2>
-          <p><small><i>It's been so long.</i></small></p>
+          <p>
+            <small><i>It's been so long.</i></small>
+          </p>
         </div>
         <ul class="nav-links">
           <!-- TODO: why the fuck are we doing this manually -->
@@ -43,7 +51,9 @@
           <li><a href="#" onclick="showView('updates')">Updates</a></li>
           <li><a href="#" onclick="showView('projects')">Projects</a></li>
           <li><a href="#" onclick="showView('randoms')">Randoms</a></li>
-          <li><a href="#" onclick="showView('legal-about')">Legal&#47;About</a></li>
+          <li>
+            <a href="#" onclick="showView('legal-about')">Legal&#47;About</a>
+          </li>
         </ul>
         <img
           hide-on-mobile
@@ -143,9 +153,11 @@
           <br />
           <p>
             Font:
-            <a target="_blank" href="https://fonts.google.com/specimen/Outfit">Outfit</a> by
-            Smartsheet Inc, Rodrigo Fuenzalida. Distributed by Google as part of
-            the Google Fonts collection.
+            <a target="_blank" href="https://fonts.google.com/specimen/Outfit"
+              >Outfit</a
+            >
+            by Smartsheet Inc, Rodrigo Fuenzalida. Distributed by Google as part
+            of the Google Fonts collection.
           </p>
           <p>
             Images: All over the Internet. Credits goes to the respective
@@ -153,15 +165,20 @@
           </p>
           <p>Design: me <img src="images/obamamedal.jpg" picmoji /></p>
           <br />
-          <p>This site does not use any heavy web frameworks. Isn't that cool?</p>
+          <p>
+            This site does not use any heavy web frameworks. Isn't that cool?
+          </p>
           <p>Based on the technologies:</p>
-            <ul>
-                <li>HTML5</li>
-                <li>CSS3</li>
-                <li>JavaScript (ECMAScript 2020+)</li>
-                <li><a target="_blank" href="https://pyscript.net/">PyScript</a> (Do you know I suck at JavaScript?)</li>
-                <li>Custom Python bundler</li>
-            </ul>
+          <ul>
+            <li>HTML5</li>
+            <li>CSS3</li>
+            <li>JavaScript (ECMAScript 2020+)</li>
+            <li>
+              <a target="_blank" href="https://pyscript.net/">PyScript</a> (Do
+              you know I suck at JavaScript?)
+            </li>
+            <li>Custom Python bundler</li>
+          </ul>
           <br />
           <p>This website is hosted on a 2010 laptop.</p>
           <p>It's going to be slow (even over Ethernet!). Here's the specs:</p>
@@ -170,12 +187,19 @@
             <li>RAM: 8GB DDR3</li>
             <li>GPU: Intel GMA</li>
           </ul>
+          <p>Laptop Status: <span id="server-stats">Loading...</span></p>
           <br />
           <p>No copyright infringement intended.</p>
 
           <!-- This is too true !! -->
           <p>
-            Made with <img src="images/monsterenergy.png" picmoji /> and <img src="images/ily.png" picmoji picmoji-hidden picmoji-overlap />❤️.
+            Made with <img src="images/monsterenergy.png" picmoji /> and
+            <img
+              src="images/ily.png"
+              picmoji
+              picmoji-hidden
+              picmoji-overlap
+            />❤️.
           </p>
           <p><small>Build: {{DATE}} {{TIME}}</small></p>
         </my-sidepage>
@@ -187,10 +211,7 @@
           <br />
           <script>
             function random_roll() {
-              const wahwahwahwah = [
-                "?",
-                "you will get diddled by shrek💚"
-              ];
+              const wahwahwahwah = ["?", "you will get diddled by shrek💚"];
               const ocElm = document.getElementById("random_roll_outcome");
               const ridx = Math.floor(Math.random() * wahwahwahwah.length);
               ocElm.textContent = wahwahwahwah[ridx];
@@ -217,12 +238,28 @@
     </div>
 
     <script type="mpy">
-        print(f"Hello! Do you know my name?")
+      print(f"Hello! Do you know my name?")
 
-        import js
+      import js
     </script>
     <script>
-      function setup() {}
+      function setup() {
+        const hash = location.hash.replace("#", "");
+        if (hash) {
+          showView(hash);
+        } else {
+          showView("home");
+        }
+
+        // Fetch Server Stats
+        fetch("/api/stats")
+          .then((r) => r.json())
+          .then((data) => {
+            const el = document.getElementById("server-stats");
+            if (el)
+              el.innerText = data.status;
+          });
+      }
 
       class SidePage extends HTMLElement {
         constructor() {

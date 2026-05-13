@@ -6,6 +6,23 @@ import os
 app = FastAPI()
 rooty = "./dist"
 
+start_time = time.time() # Capture start time
+
+def get_cpu_temp():
+    try:
+        with open("/sys/class/thermal/thermal_zone0/temp", "r") as f:
+            temp = f.read()
+            return f"{int(temp) / 1000}°C"
+    except:
+        return "N/A"
+
+@app.get("/api/stats")
+async def get_stats():
+    uptime_seconds = int(time.time() - start_time)
+    return {
+        "status": f"Uptime: {uptime_seconds // 3600}h {(uptime_seconds % 3600) // 60}m | Temp: {get_cpu_temp()}",
+    }
+
 get_inc = 0
 
 @app.get("/api/inc")
