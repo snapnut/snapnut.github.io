@@ -250,7 +250,10 @@ my-sidepage.active {
   }
 
   .sidebar-header p {
-    display: none;
+    flex: 1;
+    margin: 0;
+    font-size: 0.8rem;
+    text-align: center;
   }
 
   .sidebar-toggle-btn {
