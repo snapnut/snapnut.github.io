@@ -8,7 +8,7 @@ app = FastAPI()
 rooty = "./dist"
 
 start_time = time.time()
-myUnameStr = os.uname().sysname + " " + os.uname().release + " " + os.uname().version
+mySysname = os.uname().sysname
 
 def get_cpu_temp():
     try:
@@ -22,7 +22,7 @@ def get_cpu_temp():
 async def get_stats():
     uptime_seconds = int(time.time() - start_time)
     return {
-        "status": f"Uptime: {uptime_seconds // 3600}h {(uptime_seconds % 3600) // 60}m | Temp: {get_cpu_temp()} | uname: {myUnameStr}",
+        "status": f"System: {mySysname} | Uptime: {uptime_seconds // 3600}h {(uptime_seconds % 3600) // 60}m | Temp: {get_cpu_temp()}",
     }
 
 get_inc = 0
