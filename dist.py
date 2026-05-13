@@ -31,7 +31,7 @@ def replace_tag(match):
         return syms[tag_name]()
     return match.group(0)
 
-def process_file(path, minify=False):
+def process_file(path):
     try:
         with open(path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -39,24 +39,12 @@ def process_file(path, minify=False):
         # 1. Replace Tags
         new_content = TAG_RE.sub(replace_tag, content)
 
-        # 2. Minify (Optional - see implementation below)
-        if minify:
-            new_content = minify_html_logic(new_content)
-
         if new_content != content:
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(new_content)
             print(f"Processed: {path}")
     except Exception as e:
         print(f"Error processing {path}: {e}")
-
-def minify_html_logic(html):
-    # Remove comments
-    html = re.sub(r'', '', html, flags=re.DOTALL)
-    # Collapse whitespace/newlines between tags
-    html = re.sub(r'>\s+<', '><', html)
-    # Remove leading/trailing whitespace
-    return html.strip()
 
 # --- MAIN EXECUTION ---
 def main():
@@ -76,8 +64,8 @@ def main():
     print("Processing")
     for root, _, files in os.walk(BUILD_DIR):
         for file in files:
-            if file.endswith('.html'):
-                process_file(os.path.join(root, file), minify=True)
+            if file.endswith('.html') or file.endswith('.js') or file.endswith('.css'):
+                process_file(os.path.join(root, file))
 
     print("Ready for distribution!")
 
