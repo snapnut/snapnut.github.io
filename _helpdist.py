@@ -1,7 +1,7 @@
 import sys
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 
 state = {'count': 0}
 
@@ -9,7 +9,7 @@ def get_count():
     state['count'] += 1
     return str(state['count'])
 
-now = datetime.now()
+now = datetime.now(timezone.utc)
 syms = {
     'DATE':    lambda: now.strftime('%Y-%m-%d'),
     'TIME':    lambda: now.strftime('%H:%M:%S UTC'),
