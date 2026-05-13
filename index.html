@@ -24,6 +24,7 @@
   </head>
   <body>
     <canvas id="rainCanvas"></canvas>
+
     <template id="sidepage-template">
       <section>
         <slot></slot>
@@ -37,6 +38,7 @@
           <p><small><i>It's been so long.</i></small></p>
         </div>
         <ul class="nav-links">
+          <!-- TODO: why the fuck are we doing this manually -->
           <li><a href="#" onclick="showView('home')">Home</a></li>
           <li><a href="#" onclick="showView('updates')">Updates</a></li>
           <li><a href="#" onclick="showView('projects')">Projects</a></li>

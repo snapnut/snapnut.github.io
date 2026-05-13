@@ -9,6 +9,7 @@ body {
   font-style: normal;
 }
 
+/* TODO: ios16 on my phone seems to do aggressive optimizations: blurry even after being zoomed in... */
 [picmoji] {
   width: var(--picmoji-width, auto);
   height: 1.5em;
@@ -29,7 +30,8 @@ body {
   user-select: none;
   touch-action: manipulation;
 
-  will-change: transform;
+  will-change: auto;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 [picmoji-hidden] {
@@ -47,7 +49,7 @@ body {
 
 [picmoji]:hover,
 [picmoji].is-active {
-  transform: scale(5) rotate3d(1, 0, 1, 360deg);
+  transform: scale(5) rotate3d(1, 0, 1, 360deg) translateZ(0);
   z-index: 999;
   transform-origin: center;
   filter: drop-shadow(0px 20px 30px rgba(0, 0, 0, 0.5));
