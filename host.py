@@ -163,7 +163,7 @@ async def getLocal(file_name: str, request: Request) -> Response:
 @app.exception_handler(404)
 async def fourOhFour(request: Request, exception: HTTPException):
     return Response(
-        content="<h1>404 Not Found</h1><p>The requested resource was not found.</p><br><a href='/'>Go home!</a>",
+        content="<h1>404 Not Found</h1><p>The requested resource was not found.</p><hr><a href='/'>Go home!</a>",
         status_code=404,
         media_type="text/html"
     )
