@@ -140,7 +140,6 @@ async def getLocal(file_name: str, request: Request) -> Response:
             rendered_html,
             minify_js=True,
             minify_css=True,
-            remove_comments=True,
             remove_processing_instructions=True
         ), media_type="text/html")
     except Exception as e:
