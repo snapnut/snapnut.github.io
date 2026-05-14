@@ -117,11 +117,13 @@ engine = PyHPEngine()
 
 async def getLocal(file_name: str, request: Request) -> Response:
     full_path = os.path.abspath(os.path.normpath(os.path.join(rooty, file_name)))
+
+    # Security via obscurity! 404s for both
     if not full_path.startswith(os.path.abspath(rooty)):
-        return Response(content="<h1>403 Forbidden</h1>", status_code=403, media_type="text/html")
+        raise HTTPException(status_code=404)
 
     if not os.path.isfile(full_path):
-        return Response(content="<h1>404 Not Found</h1>", status_code=404, media_type="text/html")
+        raise HTTPException(status_code=404)
 
     _, ext = os.path.splitext(full_path)
     if ext.lower() != ".html":
@@ -159,9 +161,9 @@ async def getLocal(file_name: str, request: Request) -> Response:
 # --- ROUTES ---
 
 @app.exception_handler(404)
-async def fourOhFour(request: Request, __):
+async def fourOhFour(request: Request, exception: HTTPException):
     return Response(
-        content="<h1>404 Not Found</h1><p>The requested resource was not found.</p><hr><br><a href='/'>Go home!</a>",
+        content="<h1>404 Not Found</h1><p>The requested resource was not found.</p><br><a href='/'>Go home!</a>",
         status_code=404,
         media_type="text/html"
     )
