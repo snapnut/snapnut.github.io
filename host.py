@@ -136,7 +136,13 @@ async def getLocal(file_name: str, request: Request) -> Response:
 
     try:
         rendered_html = await engine.render_file(full_path, request, {})
-        return Response(content=minify_html.minify(rendered_html), media_type="text/html")
+        return Response(content=minify_html.minify(
+            rendered_html,
+            minify_js=True,
+            minify_css=True,
+            remove_comments=True,
+            remove_processing_instructions=True
+        ), media_type="text/html")
     except Exception as e:
         print("\n--- PYHP RENDER ERROR ---")
         print(f"File: {full_path}")
