@@ -11,16 +11,8 @@ body {
 
 [picmoji] {
   width: auto;
-  /* WebKit hack! Force it to render high quality then render at low sizes! */
-  /* 7.5em is 1.5em * 5 */
-  /* 0.2 is 1/5, so it scales down to 1.5em! */
-  height: 7.5em;
-  /* Fix because its like covid when it's used, everything flees it */
-  margin-top: -3em;
-  margin-bottom: -3em;
-  margin-left: -3em;
-  margin-right: -3em;
-  transform: scale(0.2);
+  height: 1.5em;
+  transform: scale(1);
   vertical-align: middle;
   display: inline-block;
   perspective: 1000px;
@@ -53,7 +45,7 @@ body {
 
 [picmoji]:hover,
 [picmoji].is-active {
-  transform: scale(1) rotate3d(1, 0, 1, 360deg) translateZ(0);
+  transform: scale(5) rotate3d(1, 0, 1, 360deg) translateZ(0);
   z-index: 999;
   transform-origin: center;
   filter: drop-shadow(0px 20px 30px rgba(0, 0, 0, 0.5));
