@@ -1,6 +1,7 @@
 import os
 import time
 import re
+import json
 import asyncio
 import textwrap
 import traceback
@@ -30,6 +31,11 @@ class PyHPEngine:
     def __init__(self):
         self._cache: Dict[str, Any] = {}
 
+    @staticmethod
+    def _python_literal(value: str) -> str:
+        # JSON string quoting is safe for arbitrary text and avoids edge-case quote injection.
+        return json.dumps(value, ensure_ascii=False)
+
     async def render_file(self, file_path: str, request: Request, context: Dict[str, Any]) -> str:
         with open(file_path, 'r', encoding='utf-8') as f:
             template = f.read()
@@ -52,7 +58,10 @@ class PyHPEngine:
         return await render_context['__render']()
 
     def _build_context(self, request: Request, context: Dict[str, Any]) -> Dict[str, Any]:
+        # Preserve module globals so helpers defined at the top of host.py
+        # and imported utilities remain available inside templates.
         runtime_context = globals().copy()
+        runtime_context['request'] = request
         runtime_context.update(context)
         return runtime_context
 
@@ -68,9 +77,9 @@ class PyHPEngine:
         pos = 0
         for script_match in self.SCRIPT_BLOCK_RE.finditer(template):
             self._append_segment(lines, template[pos:script_match.start()])
-            lines.append(f'    output.append({script_match.group(1)!r})')
-            lines.append(f'    output.append({script_match.group(2)!r})')
-            lines.append(f'    output.append({script_match.group(3)!r})')
+            lines.append(f'    output.append({self._python_literal(script_match.group(1))})')
+            lines.append(f'    output.append({self._python_literal(script_match.group(2))})')
+            lines.append(f'    output.append({self._python_literal(script_match.group(3))})')
             pos = script_match.end()
 
         self._append_segment(lines, template[pos:])
@@ -84,7 +93,7 @@ class PyHPEngine:
         for match in self.TEMPLATE_TAG_RE.finditer(segment):
             raw_text = segment[last_pos:match.start()]
             if raw_text:
-                lines.append(f'    output.append("""{raw_text!r}""")')
+                lines.append(f'    output.append({self._python_literal(raw_text)})')
 
             expr_block = match.group(1)
             code_block = match.group(2)
@@ -101,7 +110,7 @@ class PyHPEngine:
 
         remaining = segment[last_pos:]
         if remaining:
-            lines.append(f'    output.append({remaining!r})')
+            lines.append(f'    output.append({self._python_literal(remaining)})')
 
 engine = PyHPEngine()
 
