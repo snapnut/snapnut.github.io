@@ -135,6 +135,7 @@ async def getLocal(file_name: str, request: Request) -> Response:
             return Response(content="<h1>500 Internal Server Error</h1>", status_code=500, media_type="text/html")
 
     try:
+        # When the file is rendered, it should be just only VALID HTML. That means no processing instructions!!!
         rendered_html = await engine.render_file(full_path, request, {})
         return Response(content=minify_html.minify(
             rendered_html,
