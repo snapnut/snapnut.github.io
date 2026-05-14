@@ -134,35 +134,28 @@ async def getLocal(file_name: str, request: Request) -> Response:
         print(f"Traceback:\n{traceback.format_exc()}")
         print("--------------------------\n")
         return Response(
-            content="<h1>500 Internal Server Error</h1><p>Something went wrong processing the page :(</p>",
+            content="<h1>500 Internal Server Error</h1><p>Something went wrong processing the page :(</p><hr><small><i>PyHP</i></small>",
             status_code=500,
             media_type="text/html"
         )
 
 # --- ROUTES ---
 
-@app.get("/api/stats")
 async def get_stats():
     uptime_seconds = int(time.time() - start_time)
     return {
         "status": f"System: {mySysname} | Uptime: {uptime_seconds // 3600}h {(uptime_seconds % 3600) // 60}m | Temp: {get_cpu_temp()}",
     }
 
-get_inc = 0
-@app.get("/api/inc")
-async def WS_get_inc():
-    global get_inc
-    get_inc += 1
-    return {"inc": get_inc}
-
 @app.get("/")
 async def WS_root(request: Request):
     return await getLocal("index.html", request)
 
-# NOTE: App mounting should remain at the bottom so it doesn't hijack API routes, 
-# but our catch-all above will now handle all routing requests.
 app.mount("/", StaticFiles(directory=rooty), name="static")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    from uvicorn.config import LOGGING_CONFIG
+    LOGGING_CONFIG["formatters"]["default"]["fmt"] = "%(asctime)s - %(levelname)s - %(message)s"
+    LOGGING_CONFIG["formatters"]["access"]["fmt"] = "%(asctime)s - %(levelname)s - %(client_addr)s - '%(request_line)s' %(status_code)s"
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_config=LOGGING_CONFIG)
