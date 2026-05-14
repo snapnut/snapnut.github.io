@@ -136,6 +136,7 @@ async def getLocal(file_name: str, request: Request) -> Response:
 
     try:
         # When the file is rendered, it should be just only VALID HTML. That means no processing instructions!!!
+        # Ideally the minifier should run in dist.py, but I catch all edge cases!!
         rendered_html = await engine.render_file(full_path, request, {})
         return Response(content=minify_html.minify(
             rendered_html,
@@ -150,7 +151,7 @@ async def getLocal(file_name: str, request: Request) -> Response:
         print(f"Traceback:\n{traceback.format_exc()}")
         print("--------------------------\n")
         return Response(
-            content="<h1>500 Internal Server Error</h1><p>Something went wrong processing the page :(</p><hr><small><i>PyHP</i></small>",
+            content="<h1>500 Internal Server Error</h1><p>Something went wrong processing the page 3:</p><hr><small><i>PyHP</i></small>",
             status_code=500,
             media_type="text/html"
         )
