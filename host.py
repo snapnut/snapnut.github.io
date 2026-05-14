@@ -158,6 +158,14 @@ async def getLocal(file_name: str, request: Request) -> Response:
 
 # --- ROUTES ---
 
+@app.exception_handler(404)
+async def fourOhFour(request: Request, __):
+    return Response(
+        content="<h1>404 Not Found</h1><p>The requested resource was not found.</p><hr><br><a href='/'>Go home!</a>",
+        status_code=404,
+        media_type="text/html"
+    )
+
 async def get_stats():
     uptime_seconds = int(time.time() - start_time)
     return {
