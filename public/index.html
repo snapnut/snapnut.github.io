@@ -59,6 +59,8 @@
           for view_id, label in nav_items: print(f"""<li><a href="#" onclick="showView(\'{view_id}\'); closeMobileNav()">{label}</a></li>""", end="")
           ?>
         </ul>
+
+        <!-- TODO: i could probably join these two imgs -->
         <img
           hide-on-mobile
           onclick="madotsuki()"
@@ -251,8 +253,13 @@
     </div>
 
     <script>
+      // TODO: either this script looks like shit or I suck at programming
+
+      const sidebar = document.querySelector(".sidebar");
+
       function setup() {}
 
+      // This is pretty wasteful but its what i want
       class SidePage extends HTMLElement {
         constructor() {
           super();
@@ -273,12 +280,10 @@
       customElements.define("my-sidepage", SidePage);
 
       function toggleMobileNav() {
-        const sidebar = document.querySelector(".sidebar");
         sidebar.classList.toggle("mobile-nav-open");
       }
 
       function closeMobileNav() {
-        const sidebar = document.querySelector(".sidebar");
         sidebar.classList.remove("mobile-nav-open");
       }
 
