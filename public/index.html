@@ -209,7 +209,7 @@
                 for idx, obj in enumerate(entries):
                     ts = obj.get('ts', 0)
                     msg = obj.get('msg', '')
-                    print(f'<p><b>Stranger:</b> {msg}<small class="gb-ts" data-ts="{ts}"></small></p>')
+                    print(f'<p><b>Stranger:</b> <pre>{msg}</pre> <small class="gb-ts" data-ts="{ts}"></small></p>')
             else:
                 print('<p>No messages yet. Be the first one to leave a message!</p>')
             ?>
