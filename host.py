@@ -8,6 +8,7 @@ import traceback
 import mimetypes
 import minify_html
 import html as _html
+import uuid
 from fastapi import FastAPI, Response, Request, HTTPException
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -28,11 +29,43 @@ def get_cpu_temp():
         return "N/A"
 
 class PyHPEngine:
-    TEMPLATE_TAG_RE = re.compile(r'<\?=\s*(.*?)\s*\?>|<\?(?!\=)(.*?)\?>', re.DOTALL)
-    SCRIPT_BLOCK_RE = re.compile(r'(?is)(<script\b[^>]*>)(.*?)(</script>)')
+    TEMPLATE_TAG_RE = re.compile(r'<!--pyinl\s*(.*?)\s*-->|<!--py(?!inl)\s*(.*?)\s*-->', re.DOTALL)
+    SCRIPT_BLOCK_RE = re.compile(r'(?is)(<script\b[^>]*>)(.*?)(</script>)', re.DOTALL)
 
     def __init__(self):
         self._cache: Dict[str, Any] = {}
+
+    def _smart_dedent(self, text: str) -> str:
+        """
+        Remove common leading whitespace from text, handling cases where the first
+        line may have no indentation (e.g., when code starts on the same line as the tag).
+        For the first line, use it as-is. For subsequent lines, find the common indentation
+        and remove it.
+        """
+        lines = text.split('\n')
+        if not lines:
+            return text
+        
+        # Find minimum indentation across lines 2+ (non-empty lines)
+        min_indent = float('inf')
+        for line in lines[1:]:  # Skip first line
+            if line.strip():  # Non-empty line
+                indent = len(line) - len(line.lstrip())
+                min_indent = min(min_indent, indent)
+        
+        if min_indent == float('inf') or min_indent == 0:
+            # No indentation to remove from lines 2+, return as-is
+            return text
+        
+        # Remove the minimum indentation from all lines except the first
+        dedented_lines = [lines[0]]  # Keep first line as-is
+        for line in lines[1:]:
+            if line.strip():  # Non-empty
+                dedented_lines.append(line[min_indent:] if len(line) > min_indent else line.lstrip())
+            else:  # Empty or whitespace-only
+                dedented_lines.append('')
+        
+        return '\n'.join(dedented_lines)
 
     @staticmethod
     def _python_literal(value: str) -> str:
@@ -116,11 +149,9 @@ class PyHPEngine:
                 expression = expr_block.strip()
                 lines.append(f'    output.append(str({expression}))')
             elif code_block is not None:
-                # Keep the original code block line structure so line numbers
-                # align with the template. Dedent to normalize indentation
-                # but do not strip leading/trailing newlines which affect
-                # line numbering.
-                block_text = textwrap.dedent(code_block)
+                # Strip leading/trailing whitespace from the block, then dedent
+                block_text = code_block.strip()
+                block_text = self._smart_dedent(block_text)
                 for code_line in block_text.splitlines():
                     lines.append(f'    {code_line}')
 
@@ -203,6 +234,8 @@ ip_submissions = {}
 RATE_WINDOW = 24 * 3600  # 24 hours
 MAX_PER_WINDOW = 50      # max submissions per IP per window
 MIN_INTERVAL = 15        # seconds between submissions
+# Message length limit (characters)
+MAX_MESSAGE_CHARS = 100
 
 @app.post("/api/submit-guestbook")
 async def submit_guestbook(request: Request):
@@ -230,9 +263,9 @@ async def submit_guestbook(request: Request):
     if not msg:
         return Response(content=json.dumps({"ok": False, "error": "empty"}), media_type="application/json", status_code=400)
 
-    # limit length
-    if len(msg) > 2000:
-        msg = msg[:2000]
+    # enforce length limit by truncating (characters, UTF-8 safe since Python strings are Unicode)
+    if len(msg) > MAX_MESSAGE_CHARS:
+        msg = msg[:MAX_MESSAGE_CHARS]
 
     # heuristic: reject excessive links
     if len(re.findall(r'https?://', msg)) > 2:
@@ -241,7 +274,31 @@ async def submit_guestbook(request: Request):
     # sanitize to prevent XSS
     safe_msg = _html.escape(msg)
     ts = now
-    entry = {"ts": ts, "msg": safe_msg}
+    # Generate a server-side unique ID (UUID4 string, 36 chars)
+    def _generate_unique_id():
+        # Attempt a few times to avoid improbable collisions by scanning existing IDs
+        for _ in range(5):
+            cid = str(uuid.uuid4())
+            exists = False
+            try:
+                with open("guestbook.jsonl", "r", encoding="utf-8") as rf:
+                    for line in rf:
+                        try:
+                            obj = json.loads(line)
+                        except Exception:
+                            continue
+                        if obj.get("id") == cid:
+                            exists = True
+                            break
+            except FileNotFoundError:
+                pass
+            if not exists:
+                return cid
+        # Fallback (extremely unlikely to collide)
+        return str(uuid.uuid4())
+
+    cid = _generate_unique_id()
+    entry = {"id": cid, "ts": ts, "msg": safe_msg}
 
     try:
         with open("guestbook.jsonl", "a", encoding="utf-8") as f:
@@ -254,7 +311,8 @@ async def submit_guestbook(request: Request):
     times.append(now)
     ip_submissions[ip] = times
 
-    return Response(content=json.dumps({"ok": True, "ts": ts}), media_type="application/json")
+    # Return the saved (possibly truncated) message and server-generated id
+    return Response(content=json.dumps({"ok": True, "ts": ts, "saved": msg, "id": cid}), media_type="application/json")
 
 app.mount("/", StaticFiles(directory=rooty), name="static")
 app.add_middleware(GZipMiddleware, minimum_size=500)

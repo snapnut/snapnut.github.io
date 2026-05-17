@@ -114,6 +114,13 @@ my-sidepage.active {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* Guestbook counter styling */
+#gb-counter {
+  color: white;
+  font-size: 0.9rem;
+  opacity: 0.95;
+}
+
 .dock-bar.is-hidden {
   transform: translateY(100%);
 }

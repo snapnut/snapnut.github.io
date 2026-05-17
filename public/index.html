@@ -27,7 +27,7 @@
     />
   </head>
   <body>
-    <? sp_break = "<br /><hr /><br />" ?>
+    <!--py sp_break = "<br /><hr /><br />" -->
 
     <canvas id="rainCanvas"></canvas>
 
@@ -54,7 +54,7 @@
         </div>
         <ul class="nav-links">
           <!-- prettier-ignore -->
-          <?
+          <!--py
           nav_items = [
             ("home", "Home"),
             ("updates", "Updates"),
@@ -70,7 +70,7 @@
               >{label}</a
             >
           </li>
-          """, end="") ?>
+          """, end="") -->
         </ul>
 
         <!-- TODO: i could probably join these two imgs -->
@@ -105,7 +105,7 @@
         <my-sidepage name="home">
           <h1>Welcome to Butterscotch!</h1>
           <p><i>~KuyNahee</i></p>
-          <?= sp_break ?>
+          <!--pyinl sp_break -->
           <p>
             This site is
             <img
@@ -119,7 +119,7 @@
           </p>
           <br />
           <h1>What is this site?</h1>
-          <?= sp_break ?>
+          <!--pyinl sp_break -->
           <p>A place to look around.</p>
           <br />
           <p>
@@ -139,7 +139,7 @@
         <!-- TODO: branch this shit into python! load blog.txt or something -->
         <my-sidepage name="updates">
           <h1>Updates</h1>
-          <?= sp_break ?>
+          <!--pyinl sp_break -->
           <p>5/14/26 - Backend updates.</p>
           <p>5/13/26 - Arguably many more things today!!</p>
           <p>
@@ -159,7 +159,7 @@
 
         <my-sidepage name="projects">
           <h1>Projects</h1>
-          <?= sp_break ?>
+          <!--pyinl sp_break -->
           <p>Coming soon: Feelings</p>
           <p>
             Script Bookmark:
@@ -173,22 +173,26 @@
 
         <my-sidepage name="guestbook">
           <h1>Guestbook</h1>
-          <?= sp_break ?>
+          <!--pyinl sp_break -->
           <p>Go on, leave a message!</p>
           <hr />
-          <form id="guestbook-form">
+          <form id="guestbook-form" style="display:flex;align-items:center;gap:0.5rem">
+            <div style="flex:0 0 auto"><small id="gb-counter">0/100</small></div>
             <input
               id="guestbook-input"
               type="text"
               name="message"
               placeholder="Your message here..."
+              maxlength="100"
+              aria-describedby="gb-counter"
               required
+              style="flex:1 1 auto"
             />
-            <button type="submit">Submit</button>
+            <button type="submit" style="flex:0 0 auto">Submit</button>
           </form>
           <hr />
           <div id="guestbook-entries">
-            <?
+            <!--py
             import json
             entries = []
             try:
@@ -207,18 +211,22 @@
             if entries:
                 entries.sort(key=lambda obj: obj.get('ts', 0), reverse=True)
                 for idx, obj in enumerate(entries):
-                    ts = obj.get('ts', 0)
-                    msg = obj.get('msg', '')
-                    print(f'<p><b>Stranger:</b> <pre>{msg}</pre> <small class="gb-ts" data-ts="{ts}"></small></p>')
+                  ts = obj.get('ts', 0)
+                  msg = obj.get('msg', '')
+                  cid = obj.get('id')
+                  if cid:
+                    print(f'<p><span class="gb-id">{cid}</span>: {msg} <small class="gb-ts" data-ts="{ts}"></small></p>')
+                  else:
+                    print(f'<p>{msg} <small class="gb-ts" data-ts="{ts}"></small></p>')
             else:
                 print('<p>No messages yet. Be the first one to leave a message!</p>')
-            ?>
+            -->
           </div>
         </my-sidepage>
 
         <my-sidepage name="legal-about">
           <h1>Legal&#47;About</h1>
-          <?= sp_break ?>
+          <!--pyinl sp_break -->
           <p>
             Fonts:
           </p>
@@ -270,7 +278,7 @@
           </ul>
           <p>
             Status:
-            <span id="server-stats"><?= (await get_stats())['status'] ?></span>
+            <span id="server-stats"><!--pyinl (await get_stats())['status'] --></span>
           </p>
           <br />
           <p>No copyright infringement intended.</p>
