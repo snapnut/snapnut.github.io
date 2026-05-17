@@ -188,20 +188,31 @@
           </form>
           <hr />
           <div id="guestbook-entries">
-            <? import json entries = [] try: with open("guestbook.jsonl", "r",
-            encoding="utf-8") as _f: for line in _f: line = line.strip() if not
-            line: continue try: obj = json.loads(line) except Exception:
-            continue entries.append(obj) except FileNotFoundError: pass if
-            entries: entries.sort(key=lambda obj: obj.get('ts', 0),
-            reverse=True) for idx, obj in enumerate(entries): ts = obj.get('ts',
-            0) msg = obj.get('msg', '') print(f"
-            <p>
-              <b>Stranger:</b> {msg}
-              <small class="gb-ts" data-ts="{ts}"></small>
-            </p>
-            ") else: print("
-            <p>No messages yet. Be the first one to leave a message!</p>
-            ") ?>
+            <?
+            import json
+            entries = []
+            try:
+                with open("guestbook.jsonl", "r", encoding="utf-8") as _f:
+                    for line in _f:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        try:
+                            obj = json.loads(line)
+                        except Exception:
+                            continue
+                        entries.append(obj)
+            except FileNotFoundError:
+                pass
+            if entries:
+                entries.sort(key=lambda obj: obj.get('ts', 0), reverse=True)
+                for idx, obj in enumerate(entries):
+                    ts = obj.get('ts', 0)
+                    msg = obj.get('msg', '')
+                    print(f'<p><b>Stranger:</b> {msg}<small class="gb-ts" data-ts="{ts}"></small></p>')
+            else:
+                print('<p>No messages yet. Be the first one to leave a message!</p>')
+            ?>
           </div>
         </my-sidepage>
 
