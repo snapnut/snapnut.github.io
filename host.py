@@ -78,9 +78,16 @@ class PyHPEngine:
 
         pos = 0
         for script_match in self.SCRIPT_BLOCK_RE.finditer(template):
+            # 1. Process template tags in the HTML BEFORE the script block
             self._append_segment(lines, template[pos:script_match.start()])
+            
+            # 2. Append the literal opening <script> tag
             lines.append(f'    output.append({self._python_literal(script_match.group(1))})')
-            lines.append(f'    output.append({self._python_literal(script_match.group(2))})')
+            
+            # 3. FIX: Process template tags INSIDE the script block content
+            self._append_segment(lines, script_match.group(2))
+            
+            # 4. Append the literal closing </script> tag
             lines.append(f'    output.append({self._python_literal(script_match.group(3))})')
             pos = script_match.end()
 
