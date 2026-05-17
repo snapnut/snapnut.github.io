@@ -21,11 +21,13 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=WDXL+Lubrifont+JP+N&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <?
-    sp_break = "<br /><hr /><br />"
-    ?>
+    <? sp_break = "<br /><hr /><br />" ?>
 
     <canvas id="rainCanvas"></canvas>
 
@@ -62,8 +64,13 @@
             ("legal-about", "Legal/About"),
           ]
 
-          for view_id, label in nav_items: print(f"""<li><a href="#" onclick="showView(\'{view_id}\'); closeMobileNav()">{label}</a></li>""", end="")
-          ?>
+          for view_id, label in nav_items: print(f"""
+          <li>
+            <a href="#" onclick="showView(\'{view_id}\'); closeMobileNav()"
+              >{label}</a
+            >
+          </li>
+          """, end="") ?>
         </ul>
 
         <!-- TODO: i could probably join these two imgs -->
@@ -137,13 +144,16 @@
           <p>5/13/26 - Arguably many more things today!!</p>
           <p>
             5/12/26 - The engine is started. Welcome to
-            <span t-thickunderline><img
-              src="images/v2uk.webp"
-              picmoji
-              picmoji-overlap
-              picmoji-hidden
-              style="width: 4ch; object-fit: contain;"
-            />V2.0</span> of Butterscotch!
+            <span t-thickunderline
+              ><img
+                src="images/v2uk.webp"
+                picmoji
+                picmoji-overlap
+                picmoji-hidden
+                style="width: 4ch; object-fit: contain"
+              />V2.0</span
+            >
+            of Butterscotch!
           </p>
         </my-sidepage>
 
@@ -178,31 +188,20 @@
           </form>
           <hr />
           <div id="guestbook-entries">
-          <?
-            import json
-            entries = []
-            try:
-                with open("guestbook.jsonl", "r", encoding="utf-8") as _f:
-                    for line in _f:
-                        line = line.strip()
-                        if not line: continue
-                        try:
-                            obj = json.loads(line)
-                        except Exception:
-                            continue
-                        entries.append(obj)
-            except FileNotFoundError:
-                pass
-
-            if entries:
-                entries.sort(key=lambda obj: obj.get('ts', 0), reverse=True)
-                for idx, obj in enumerate(entries):
-                    ts = obj.get('ts', 0)
-                    msg = obj.get('msg', '')
-                    print(f"<p><b>Stranger:</b> {msg} <small class='gb-ts' data-ts='{ts}'></small></p>")
-            else:
-                print("<p>No messages yet. Be the first one to leave a message!</p>")
-          ?>
+            <? import json entries = [] try: with open("guestbook.jsonl", "r",
+            encoding="utf-8") as _f: for line in _f: line = line.strip() if not
+            line: continue try: obj = json.loads(line) except Exception:
+            continue entries.append(obj) except FileNotFoundError: pass if
+            entries: entries.sort(key=lambda obj: obj.get('ts', 0),
+            reverse=True) for idx, obj in enumerate(entries): ts = obj.get('ts',
+            0) msg = obj.get('msg', '') print(f"
+            <p>
+              <b>Stranger:</b> {msg}
+              <small class="gb-ts" data-ts="{ts}"></small>
+            </p>
+            ") else: print("
+            <p>No messages yet. Be the first one to leave a message!</p>
+            ") ?>
           </div>
         </my-sidepage>
 
@@ -210,13 +209,25 @@
           <h1>Legal&#47;About</h1>
           <?= sp_break ?>
           <p>
-            Font:
-            <a target="_blank" href="https://fonts.google.com/specimen/Outfit"
-              >Outfit</a
-            >
-            by Smartsheet Inc, Rodrigo Fuenzalida. Distributed by Google as part
-            of the Google Fonts collection.
+            Fonts:
           </p>
+          <ul>
+            <li>
+              <a target="_blank" href="https://fonts.google.com/specimen/Outfit"
+                >Outfit</a
+              >
+              by Smartsheet Inc, Rodrigo Fuenzalida. Distributed by Google as part
+              of the Google Fonts collection.
+            </li>
+            <li>
+              <a
+                target="_blank"
+                href="https://fonts.google.com/specimen/WDXL+Lubrifont+JP+N"
+                >WDXL Lubrifont JP N</a
+              >
+              by NightFurySL2001 (cool name btw!!). Distributed by Google as part of the Google Fonts collection.
+            </li>
+          </ul>
           <p>
             Images: All over the Internet. Credits goes to the respective
             owners.
