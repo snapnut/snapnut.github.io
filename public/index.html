@@ -23,6 +23,10 @@
     />
   </head>
   <body>
+    <?
+    sp_break = "<br /><hr /><br />"
+    ?>
+
     <canvas id="rainCanvas"></canvas>
 
     <template id="sidepage-template">
@@ -94,9 +98,7 @@
         <my-sidepage name="home">
           <h1>Welcome to Butterscotch!</h1>
           <p><i>~KuyNahee</i></p>
-          <br />
-          <hr />
-          <br />
+          <?= sp_break ?>
           <p>
             This site is
             <img
@@ -110,9 +112,7 @@
           </p>
           <br />
           <h1>What is this site?</h1>
-          <br />
-          <hr />
-          <br />
+          <?= sp_break ?>
           <p>A place to look around.</p>
           <br />
           <p>
@@ -132,9 +132,7 @@
         <!-- TODO: branch this shit into python! load blog.txt or something -->
         <my-sidepage name="updates">
           <h1>Updates</h1>
-          <br />
-          <hr />
-          <br />
+          <?= sp_break ?>
           <p>5/14/26 - Backend updates.</p>
           <p>5/13/26 - Arguably many more things today!!</p>
           <p>
@@ -151,9 +149,7 @@
 
         <my-sidepage name="projects">
           <h1>Projects</h1>
-          <br />
-          <hr />
-          <br />
+          <?= sp_break ?>
           <p>Coming soon: Feelings</p>
           <p>
             Script Bookmark:
@@ -167,10 +163,8 @@
 
         <my-sidepage name="guestbook">
           <h1>Guestbook</h1>
-          <br />
-          <hr />
-          <br />
-          <p>Go, leave a message!</p>
+          <?= sp_break ?>
+          <p>Go on, leave a message!</p>
           <hr />
           <form id="guestbook-form">
             <input
@@ -214,9 +208,7 @@
 
         <my-sidepage name="legal-about">
           <h1>Legal&#47;About</h1>
-          <br />
-          <hr />
-          <br />
+          <?= sp_break ?>
           <p>
             Font:
             <a target="_blank" href="https://fonts.google.com/specimen/Outfit"
@@ -248,7 +240,7 @@
           </p>
           <br />
           <p>This website is hosted on a 2010 laptop.</p>
-          <p>It's going to be slow (even over Ethernet!). Here's the specs:</p>
+          <p>It's going to be slow! Here's the specs:</p>
           <ul>
             <li>CPU: Intel Core i5-560M</li>
             <li>RAM: 8GB DDR3</li>
@@ -265,6 +257,7 @@
           <p>
             Made with <img src="images/monsterenergy.webp" picmoji /> and ❤️.
           </p>
+
           <p><small>Dist.Build: {{DATE}} {{TIME}}</small></p>
         </my-sidepage>
 
