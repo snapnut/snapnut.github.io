@@ -53,6 +53,7 @@
             ("updates", "Updates"),
             ("projects", "Projects"),
             ("randoms", "Randoms"),
+            ("guestbook", "Guestbook"),
             ("legal-about", "Legal/About"),
           ]
 
@@ -161,6 +162,32 @@
               >Bypass copy&paste restrictions</a
             >
           </p>
+        </my-sidepage>
+
+        <my-sidepage name="guestbook">
+          <h1>Guestbook</h1>
+          <br />
+          <hr />
+          <br />
+          <p>Go, leave a message!</p>
+          <hr />
+          <form method="POST" action="/guestbook">
+            <input
+              type="text"
+              name="message"
+              placeholder="Your message here..."
+              required
+            />
+            <button type="submit">Submit</button>
+          <hr />
+          <?
+          gbk = open("guestbook.txt", "r").read().strip()
+          if gbk:
+              for idx, line in enumerate(gbk.split("\n")):
+                  print(f"<p><b>Anon{idx+1}:</b> {line}</p>")
+           else:
+              print("<p>No messages yet. Be the first one to leave a message!</p>")
+          ?>
         </my-sidepage>
 
         <my-sidepage name="legal-about">
