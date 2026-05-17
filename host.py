@@ -8,6 +8,7 @@ import traceback
 import mimetypes
 import minify_html
 from fastapi import FastAPI, Response, Request, HTTPException
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from typing import Any, Dict
 
@@ -179,6 +180,7 @@ async def WS_root(request: Request):
     return await getLocal("index.html", request)
 
 app.mount("/", StaticFiles(directory=rooty), name="static")
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 if __name__ == "__main__":
     import uvicorn
