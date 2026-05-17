@@ -7,6 +7,7 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=0"
     />
     <script src="site.js"></script>
+    <script src="guestbook.js"></script>
     <script src="rain.js"></script>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="rain.css" />
@@ -171,23 +172,44 @@
           <br />
           <p>Go, leave a message!</p>
           <hr />
-          <form method="POST" action="/guestbook">
+          <form id="guestbook-form">
             <input
+              id="guestbook-input"
               type="text"
               name="message"
               placeholder="Your message here..."
               required
             />
             <button type="submit">Submit</button>
+          </form>
           <hr />
+          <div id="guestbook-entries">
           <?
-          gbk = open("guestbook.txt", "r").read().strip()
-          if gbk:
-              for idx, line in enumerate(gbk.split("\n")):
-                  print(f"<p><b>Anon{idx+1}:</b> {line}</p>")
-           else:
-              print("<p>No messages yet. Be the first one to leave a message!</p>")
+            import json
+            entries = []
+            try:
+                with open("guestbook.jsonl", "r", encoding="utf-8") as _f:
+                    for line in _f:
+                        line = line.strip()
+                        if not line: continue
+                        try:
+                            obj = json.loads(line)
+                        except Exception:
+                            continue
+                        entries.append(obj)
+            except FileNotFoundError:
+                pass
+
+            if entries:
+                entries.sort(key=lambda obj: obj.get('ts', 0), reverse=True)
+                for idx, obj in enumerate(entries):
+                    ts = obj.get('ts', 0)
+                    msg = obj.get('msg', '')
+                    print(f"<p><b>Stranger:</b> {msg} <small class='gb-ts' data-ts='{ts}'></small></p>")
+            else:
+                print("<p>No messages yet. Be the first one to leave a message!</p>")
           ?>
+          </div>
         </my-sidepage>
 
         <my-sidepage name="legal-about">

@@ -7,6 +7,7 @@ import textwrap
 import traceback
 import mimetypes
 import minify_html
+import html as _html
 from fastapi import FastAPI, Response, Request, HTTPException
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -102,7 +103,11 @@ class PyHPEngine:
         for match in self.TEMPLATE_TAG_RE.finditer(segment):
             raw_text = segment[last_pos:match.start()]
             if raw_text:
-                lines.append(f'    output.append({self._python_literal(raw_text)})')
+                # Preserve original line counts so Python tracebacks map to
+                # the template file lines. Split with keepends to retain
+                # newline characters and emit one source line per template line.
+                for raw_line in raw_text.splitlines(keepends=True):
+                    lines.append(f'    output.append({self._python_literal(raw_line)})')
 
             expr_block = match.group(1)
             code_block = match.group(2)
@@ -111,7 +116,11 @@ class PyHPEngine:
                 expression = expr_block.strip()
                 lines.append(f'    output.append(str({expression}))')
             elif code_block is not None:
-                block_text = textwrap.dedent(code_block.strip('\n'))
+                # Keep the original code block line structure so line numbers
+                # align with the template. Dedent to normalize indentation
+                # but do not strip leading/trailing newlines which affect
+                # line numbering.
+                block_text = textwrap.dedent(code_block)
                 for code_line in block_text.splitlines():
                     lines.append(f'    {code_line}')
 
@@ -119,7 +128,8 @@ class PyHPEngine:
 
         remaining = segment[last_pos:]
         if remaining:
-            lines.append(f'    output.append({self._python_literal(remaining)})')
+            for raw_line in remaining.splitlines(keepends=True):
+                lines.append(f'    output.append({self._python_literal(raw_line)})')
 
 engine = PyHPEngine()
 
@@ -161,7 +171,7 @@ async def getLocal(file_name: str, request: Request) -> Response:
         print(f"Traceback:\n{traceback.format_exc()}")
         print("--------------------------\n")
         return Response(
-            content="<h1>500 Internal Server Error</h1><p>Something went wrong processing the page 3:</p><hr><small><i>PyHP</i></small>",
+            content="<h1>500 Internal Server Error</h1><p>Something went wrong processing the page :3</p><hr><small><i>PyHP</i></small>",
             status_code=500,
             media_type="text/html"
         )
@@ -185,6 +195,66 @@ async def get_stats():
 @app.get("/")
 async def WS_root(request: Request):
     return await getLocal("index.html", request)
+
+
+# Guestbook rate-limited API
+# Basic in-memory rate limiting per IP
+ip_submissions = {}
+RATE_WINDOW = 24 * 3600  # 24 hours
+MAX_PER_WINDOW = 50      # max submissions per IP per window
+MIN_INTERVAL = 15        # seconds between submissions
+
+@app.post("/api/submit-guestbook")
+async def submit_guestbook(request: Request):
+    ip = getattr(request.client, "host", "unknown") or "unknown"
+    now = int(time.time())
+
+    # Cleanup old timestamps for this IP
+    times = ip_submissions.get(ip, [])
+    times = [t for t in times if now - t < RATE_WINDOW]
+
+    if times and (now - times[-1]) < MIN_INTERVAL:
+        return Response(content=json.dumps({"ok": False, "error": "too_many_requests", "retry_after": MIN_INTERVAL}), media_type="application/json", status_code=429)
+
+    if len(times) >= MAX_PER_WINDOW:
+        return Response(content=json.dumps({"ok": False, "error": "rate_limit_exceeded"}), media_type="application/json", status_code=429)
+
+    # Read message (JSON preferred, fallback to form)
+    try:
+        data = await request.json()
+        msg = data.get("message", "").strip()
+    except Exception:
+        form = await request.form()
+        msg = form.get("message", "").strip()
+
+    if not msg:
+        return Response(content=json.dumps({"ok": False, "error": "empty"}), media_type="application/json", status_code=400)
+
+    # limit length
+    if len(msg) > 2000:
+        msg = msg[:2000]
+
+    # heuristic: reject excessive links
+    if len(re.findall(r'https?://', msg)) > 2:
+        return Response(content=json.dumps({"ok": False, "error": "spam_detected"}), media_type="application/json", status_code=400)
+
+    # sanitize to prevent XSS
+    safe_msg = _html.escape(msg)
+    ts = now
+    entry = {"ts": ts, "msg": safe_msg}
+
+    try:
+        with open("guestbook.jsonl", "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    except Exception as e:
+        print(f"Failed writing guestbook: {e}")
+        return Response(content=json.dumps({"ok": False, "error": "write_failed"}), media_type="application/json", status_code=500)
+
+    # Persist the submission timestamp for rate limiting
+    times.append(now)
+    ip_submissions[ip] = times
+
+    return Response(content=json.dumps({"ok": True, "ts": ts}), media_type="application/json")
 
 app.mount("/", StaticFiles(directory=rooty), name="static")
 app.add_middleware(GZipMiddleware, minimum_size=500)

@@ -38,6 +38,24 @@ function playSoundOneshot(src) {
   return audio;
 }
 
+function escapeHtml(unsafe) {
+  return unsafe
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function formatGuestbookTimestamps() {
+  document.querySelectorAll(".gb-ts").forEach((el) => {
+    const ts = Number(el.dataset.ts || 0);
+    if (!ts) return;
+    const d = new Date(ts * 1000);
+    el.textContent = d.toLocaleString();
+  });
+}
+
 // This is so we can do fun shit that uses sounds/vibrations
 let interactedwiththesite = false;
 
