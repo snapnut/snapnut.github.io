@@ -8,7 +8,6 @@ import traceback
 import mimetypes
 import minify_html
 import html as _html
-import uuid
 from fastapi import FastAPI, Response, Request, HTTPException
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -18,6 +17,25 @@ app = FastAPI()
 rooty = "./dist"
 
 start_time = time.time()
+
+# Initialize numeric guestbook ID counter from existing entries
+def _init_guestbook_counter():
+    max_id = 0
+    try:
+        with open("guestbook.jsonl", "r", encoding="utf-8") as f:
+            for line in f:
+                try:
+                    obj = json.loads(line)
+                    entry_id = obj.get("id")
+                    if isinstance(entry_id, int) and entry_id > max_id:
+                        max_id = entry_id
+                except Exception:
+                    continue
+    except FileNotFoundError:
+        pass
+    return max_id
+
+_guestbook_counter = _init_guestbook_counter()
 mySysname = os.uname().sysname
 
 def get_cpu_temp():
@@ -274,30 +292,10 @@ async def submit_guestbook(request: Request):
     # sanitize to prevent XSS
     safe_msg = _html.escape(msg)
     ts = now
-    # Generate a server-side unique ID (UUID4 string, 36 chars)
-    def _generate_unique_id():
-        # Attempt a few times to avoid improbable collisions by scanning existing IDs
-        for _ in range(5):
-            cid = str(uuid.uuid4())
-            exists = False
-            try:
-                with open("guestbook.jsonl", "r", encoding="utf-8") as rf:
-                    for line in rf:
-                        try:
-                            obj = json.loads(line)
-                        except Exception:
-                            continue
-                        if obj.get("id") == cid:
-                            exists = True
-                            break
-            except FileNotFoundError:
-                pass
-            if not exists:
-                return cid
-        # Fallback (extremely unlikely to collide)
-        return str(uuid.uuid4())
-
-    cid = _generate_unique_id()
+    # Generate next numeric ID
+    global _guestbook_counter
+    _guestbook_counter += 1
+    cid = _guestbook_counter
     entry = {"id": cid, "ts": ts, "msg": safe_msg}
 
     try:
