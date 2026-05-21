@@ -37,6 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await resp.json();
       if (data.ok) {
+        const fmsg = document.getElementById("guestbook-no-messages");
+        if (fmsg) fmsg.remove();
+        
         const container = document.getElementById("guestbook-entries");
         const display = (data.saved !== undefined) ? data.saved : val;
         const p = document.createElement("p");
