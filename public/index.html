@@ -61,6 +61,7 @@
             ("projects", "Projects"),
             ("randoms", "Randoms"),
             ("guestbook", "Guestbook"),
+            ("favsongs", "Favorite Songs"),
             ("legal-about", "Legal/About"),
           ]
 
@@ -222,6 +223,53 @@
                 print('<p id="guestbook-no-messages">No messages yet. Be the first one to leave a message!</p>')
             -->
           </div>
+        </my-sidepage>
+
+        <my-sidepage name="favsongs">
+          <h1>Favorite Songs</h1>
+          <!--pyinl sp_break -->
+          <!--py
+          sng = [
+            # song name, artist, notes, yt link
+            ("Queen Of Venus ft. Adachi Rei", "FLAVOR FOLEY", "Awesome album but this one is about LESBIAN SEX", "https://www.youtube.com/watch?v=EpbhsrYuQJ4"),
+            ("rawdog ft. Hayden", "FLAVOR FOLEY", "Here, this one is about GAY SEX!!", "https://www.youtube.com/watch?v=HsZQOXZbWkQ"),
+            ("Water The Rosees ft. GUMI", "FLAVOR FOLEY", "Divorce!!! Waow!!", "https://www.youtube.com/watch?v=NA3MJmcyPpE"),
+            ("Spoken For ft. Kasane Teto", "FLAVOR FOLEY", "Such a song makes you see that despite everything, it's still you.", "https://www.youtube.com/watch?v=LvYL8u4p-aM"),
+            ("POTETO CHIP ft. Kasane Teto", "ROMA (ROMALOID)", "Not just the song, but it seems that the artist is very warm!!", "https://www.youtube.com/watch?v=MMy7KXZPpyw"),
+            ("Human ft. SF-A2 Miki", "FLAVOR FOLEY", "You know, I might just be influenced by the amount of views, but this song is something that resonates with me. You know? \"Ettique in normalcy\"", "https://www.youtube.com/watch?v=hbuNxmAXdNk")
+            ("INSOMNIA ft. Yi-Xi", "ROMA (ROMALOID)", "Feels like i'm time travelling back to 2010 songs, but this is a 2026 song..", "https://www.youtube.com/watch?v=9HDPGcRSRcA"),
+            ("It's Not Like I Like You!!", "Static-P", "Greatness?<br><p>@TheGamingGoose127: Top 10 tuff gym songs for big strong men</p>", "https://www.youtube.com/watch?v=tOzOD-82mW0"),
+            ("Goodbye Declaration", "Chinozo", "Eminem fails to match this artist.<br><code>local goodbye</code><br><code>-- Now goodbye has been declared!</code>", "https://www.youtube.com/watch?v=dHXC_ahjtEE"),
+            ("U.N. Owen Was Her", "ZUN", "Chaotic song but in my opinion, fits Flowey..?", "https://www.youtube.com/watch?v=8jJZA-O_B78"),
+            ("Marisa Stole The Precious Thing", "IOSYS", "Old ass song!! The entire album is awesome!!", "https://www.youtube.com/watch?v=1pDM6fQUfJs"),
+            ("On The Heights Of Despair", "Horses", "One does not want to kill themselves, but wishes to likeminded with myself.", "https://www.youtube.com/watch?v=DNGXsbZHMMI")
+            ("Cirno's Perfect Math Class", "IOSYS", "Also old ass song!! But newer than the next song somehow:", "https://www.youtube.com/watch?v=V_bQNPG2OyE"),
+            ("Eirin's Clinic That People Queue Up For", "IOSYS", "Still old. But newer than M.S.T.P.T? But in my opinion, the song sounds like a old lady singing!", "https://www.youtube.com/watch?v=HEn0o_UGnUQ"),
+            ("Rin-Chan now", "OwataP", "Lesbians? In this 2010s economy?", 'https://www.youtube.com/watch?v=_oS2aIhE2_U'),
+            ("Stop Nagging Me! ft. Akita Neru", "OwataP", "Bop. GOCHA GOCHA URUSAE!!", 'https://www.youtube.com/watch?v=-bt0IP16PZI'),
+            ("Onnanoko Ni Naritai (I wanna be a girl)", "Mafumafu", "Bop, and i'm not surviving the trans allegory allegations :)", "https://www.youtube.com/watch?v=ucbx9we6EHk"),
+            ("Your Reality", "Team Salvato", "Bop of suicide?", "https://www.youtube.com/watch?v=CAL4WMpBNs0"),
+            ("Kyu-kurarin ft. Kafu", "Iyowa", "ANOTHER bop of suicide? I mean, it's upbeat but if you know you know. :)", "https://www.youtube.com/watch?v=2b1IexhKPz4"),
+
+          ]
+
+          for s in sng:
+            print(f'''
+            <article class="song-card">
+                <a href="{s[3]}" target="_blank">
+                    <h3 d-inline>{s[0]},</h3>
+                    <span>by {s[1]}</span>
+                </a>
+                <ul>
+                    <li>{s[2]}</li>
+                </ul>
+            </article>
+            ''')
+          -->
+          <!--pyinl sp_break-->
+          <p>
+            All rights goes to the respective owners.
+          </p>
         </my-sidepage>
 
         <my-sidepage name="legal-about">

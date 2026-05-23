@@ -11,12 +11,20 @@ import html as _html
 from fastapi import FastAPI, Response, Request, HTTPException
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
+# ============================================================================
+# CONFIG & CONSTANTS
+# ============================================================================
 app = FastAPI()
 rooty = "./dist"
-
 start_time = time.time()
+
+# Guestbook rate limiting
+GUESTBOOK_RATE_WINDOW = 24 * 3600  # 24 hours
+GUESTBOOK_MAX_PER_WINDOW = 50      # max submissions per IP per window
+GUESTBOOK_MIN_INTERVAL = 15        # seconds between submissions
+GUESTBOOK_MAX_MESSAGE_CHARS = 100
 
 # Initialize numeric guestbook ID counter from existing entries
 def _init_guestbook_counter():
@@ -54,40 +62,31 @@ class PyHPEngine:
         self._cache: Dict[str, Any] = {}
 
     def _smart_dedent(self, text: str) -> str:
-        """
-        Remove common leading whitespace from text, handling cases where the first
-        line may have no indentation (e.g., when code starts on the same line as the tag).
-        For the first line, use it as-is. For subsequent lines, find the common indentation
-        and remove it.
-        """
+        """Remove common leading whitespace, handling first-line edge cases."""
         lines = text.split('\n')
         if not lines:
             return text
         
-        # Find minimum indentation across lines 2+ (non-empty lines)
         min_indent = float('inf')
-        for line in lines[1:]:  # Skip first line
-            if line.strip():  # Non-empty line
+        for line in lines[1:]:
+            if line.strip():
                 indent = len(line) - len(line.lstrip())
                 min_indent = min(min_indent, indent)
         
         if min_indent == float('inf') or min_indent == 0:
-            # No indentation to remove from lines 2+, return as-is
             return text
         
-        # Remove the minimum indentation from all lines except the first
-        dedented_lines = [lines[0]]  # Keep first line as-is
+        dedented_lines = [lines[0]]
         for line in lines[1:]:
-            if line.strip():  # Non-empty
+            if line.strip():
                 dedented_lines.append(line[min_indent:] if len(line) > min_indent else line.lstrip())
-            else:  # Empty or whitespace-only
+            else:
                 dedented_lines.append('')
         
         return '\n'.join(dedented_lines)
 
     @staticmethod
     def _python_literal(value: str) -> str:
-        # JSON string quoting is safe for arbitrary text and avoids edge-case quote injection.
         return json.dumps(value, ensure_ascii=False)
 
     async def render_file(self, file_path: str, request: Request, context: Dict[str, Any]) -> str:
@@ -105,15 +104,21 @@ class PyHPEngine:
             self._cache[file_path] = {
                 'mtime': mtime,
                 'code_obj': code_obj,
+                'source': template,  # Store for error reporting
             }
 
         render_context = self._build_context(request, context)
-        exec(code_obj, render_context)
+        try:
+            exec(code_obj, render_context)
+        except Exception as e:
+            render_context['__error_context'] = {
+                'template_source': self._cache[file_path]['source'],
+            }
+            raise
+        
         return await render_context['__render']()
 
     def _build_context(self, request: Request, context: Dict[str, Any]) -> Dict[str, Any]:
-        # Preserve module globals so helpers defined at the top of host.py
-        # and imported utilities remain available inside templates.
         runtime_context = globals().copy()
         runtime_context['request'] = request
         runtime_context.update(context)
@@ -130,16 +135,9 @@ class PyHPEngine:
 
         pos = 0
         for script_match in self.SCRIPT_BLOCK_RE.finditer(template):
-            # 1. Process template tags in the HTML BEFORE the script block
             self._append_segment(lines, template[pos:script_match.start()])
-            
-            # 2. Append the literal opening <script> tag
             lines.append(f'    output.append({self._python_literal(script_match.group(1))})')
-            
-            # 3. FIX: Process template tags INSIDE the script block content
             self._append_segment(lines, script_match.group(2))
-            
-            # 4. Append the literal closing </script> tag
             lines.append(f'    output.append({self._python_literal(script_match.group(3))})')
             pos = script_match.end()
 
@@ -154,9 +152,6 @@ class PyHPEngine:
         for match in self.TEMPLATE_TAG_RE.finditer(segment):
             raw_text = segment[last_pos:match.start()]
             if raw_text:
-                # Preserve original line counts so Python tracebacks map to
-                # the template file lines. Split with keepends to retain
-                # newline characters and emit one source line per template line.
                 for raw_line in raw_text.splitlines(keepends=True):
                     lines.append(f'    output.append({self._python_literal(raw_line)})')
 
@@ -167,7 +162,6 @@ class PyHPEngine:
                 expression = expr_block.strip()
                 lines.append(f'    output.append(str({expression}))')
             elif code_block is not None:
-                # Strip leading/trailing whitespace from the block, then dedent
                 block_text = code_block.strip()
                 block_text = self._smart_dedent(block_text)
                 for code_line in block_text.splitlines():
@@ -181,6 +175,52 @@ class PyHPEngine:
                 lines.append(f'    output.append({self._python_literal(raw_line)})')
 
 engine = PyHPEngine()
+
+# ============================================================================
+# ERROR HANDLING & FORMATTING
+# ============================================================================
+def format_template_error(file_path: str, template_source: Optional[str], exc_info: str) -> str:
+    """Format template rendering errors with helpful context."""
+    lines = [
+        "\n" + "="*80,
+        "PYHP TEMPLATE RENDERING ERROR",
+        "="*80,
+        f"File: {file_path}\n",
+        "Error traceback:",
+        exc_info,
+    ]
+    
+    # Try to extract the problematic code block from traceback
+    if template_source:
+        # Look for line numbers in the traceback
+        line_matches = re.findall(r'line (\d+)', exc_info)
+        if line_matches:
+            lines.append("\nContext from template:")
+            template_lines = template_source.split('\n')
+            for line_num_str in set(line_matches):
+                try:
+                    line_num = int(line_num_str)
+                    start = max(0, line_num - 3)
+                    end = min(len(template_lines), line_num + 2)
+                    lines.append(f"\n  Lines {start+1}-{end}:")
+                    for i in range(start, end):
+                        marker = ">>> " if i == line_num - 1 else "    "
+                        lines.append(f"  {marker}{i+1}: {template_lines[i][:100]}")
+                except (ValueError, IndexError):
+                    pass
+    
+    lines.append("\n" + "="*80 + "\n")
+    return '\n'.join(lines)
+
+def json_response(ok: bool, **kwargs) -> Response:
+    """Helper to create consistent JSON API responses."""
+    data = {"ok": ok, **kwargs}
+    status = 200 if ok else kwargs.get("status_code", 400)
+    return Response(
+        content=json.dumps(data),
+        media_type="application/json",
+        status_code=status
+    )
 
 async def getLocal(file_name: str, request: Request) -> Response:
     full_path = os.path.abspath(os.path.normpath(os.path.join(rooty, file_name)))
@@ -204,8 +244,7 @@ async def getLocal(file_name: str, request: Request) -> Response:
             return Response(content="<h1>500 Internal Server Error</h1>", status_code=500, media_type="text/html")
 
     try:
-        # When the file is rendered, it should be just only VALID HTML. That means no processing instructions!!!
-        # Ideally the minifier should run in dist.py, but I catch all edge cases!!
+        # Render template and minify output
         rendered_html = await engine.render_file(full_path, request, {})
         return Response(content=minify_html.minify(
             rendered_html,
@@ -214,11 +253,14 @@ async def getLocal(file_name: str, request: Request) -> Response:
             remove_processing_instructions=True
         ), media_type="text/html")
     except Exception as e:
-        print("\n--- PYHP RENDER ERROR ---")
-        print(f"File: {full_path}")
-        print(f"Query: {request.query_params}")
-        print(f"Traceback:\n{traceback.format_exc()}")
-        print("--------------------------\n")
+        template_source = None
+        if full_path in engine._cache:
+            template_source = engine._cache[full_path].get('source')
+        
+        exc_info = traceback.format_exc()
+        error_msg = format_template_error(full_path, template_source, exc_info)
+        print(error_msg)
+        
         return Response(
             content="<h1>500 Internal Server Error</h1><p>Something went wrong processing the page :3</p><hr><small><i>PyHP</i></small>",
             status_code=500,
@@ -246,31 +288,30 @@ async def WS_root(request: Request):
     return await getLocal("index.html", request)
 
 
-# Guestbook rate-limited API
-# Basic in-memory rate limiting per IP
+
+# ============================================================================
+# GUESTBOOK STORAGE & RATE LIMITING
+# ============================================================================
 ip_submissions = {}
-RATE_WINDOW = 24 * 3600  # 24 hours
-MAX_PER_WINDOW = 50      # max submissions per IP per window
-MIN_INTERVAL = 15        # seconds between submissions
-# Message length limit (characters)
-MAX_MESSAGE_CHARS = 100
 
 @app.post("/api/submit-guestbook")
 async def submit_guestbook(request: Request):
+    """Submit a message to the guestbook with rate limiting."""
     ip = getattr(request.client, "host", "unknown") or "unknown"
     now = int(time.time())
 
-    # Cleanup old timestamps for this IP
+    # Cleanup and validate submission frequency
     times = ip_submissions.get(ip, [])
-    times = [t for t in times if now - t < RATE_WINDOW]
+    times = [t for t in times if now - t < GUESTBOOK_RATE_WINDOW]
+    ip_submissions[ip] = times
 
-    if times and (now - times[-1]) < MIN_INTERVAL:
-        return Response(content=json.dumps({"ok": False, "error": "too_many_requests", "retry_after": MIN_INTERVAL}), media_type="application/json", status_code=429)
+    if times and (now - times[-1]) < GUESTBOOK_MIN_INTERVAL:
+        return json_response(False, error="too_many_requests", status_code=429, retry_after=GUESTBOOK_MIN_INTERVAL)
 
-    if len(times) >= MAX_PER_WINDOW:
-        return Response(content=json.dumps({"ok": False, "error": "rate_limit_exceeded"}), media_type="application/json", status_code=429)
+    if len(times) >= GUESTBOOK_MAX_PER_WINDOW:
+        return json_response(False, error="rate_limit_exceeded", status_code=429)
 
-    # Read message (JSON preferred, fallback to form)
+    # Extract and validate message
     try:
         data = await request.json()
         msg = data.get("message", "").strip()
@@ -279,38 +320,30 @@ async def submit_guestbook(request: Request):
         msg = form.get("message", "").strip()
 
     if not msg:
-        return Response(content=json.dumps({"ok": False, "error": "empty"}), media_type="application/json", status_code=400)
+        return json_response(False, error="empty", status_code=400)
 
-    # enforce length limit by truncating (characters, UTF-8 safe since Python strings are Unicode)
-    if len(msg) > MAX_MESSAGE_CHARS:
-        msg = msg[:MAX_MESSAGE_CHARS]
+    if len(msg) > GUESTBOOK_MAX_MESSAGE_CHARS:
+        msg = msg[:GUESTBOOK_MAX_MESSAGE_CHARS]
 
-    # heuristic: reject excessive links
+    # Reject obvious spam
     if len(re.findall(r'https?://', msg)) > 2:
-        return Response(content=json.dumps({"ok": False, "error": "spam_detected"}), media_type="application/json", status_code=400)
+        return json_response(False, error="spam_detected", status_code=400)
 
-    # sanitize to prevent XSS
+    # Sanitize and save
     safe_msg = _html.escape(msg)
-    ts = now
-    # Generate next numeric ID
     global _guestbook_counter
     _guestbook_counter += 1
-    cid = _guestbook_counter
-    entry = {"id": cid, "ts": ts, "msg": safe_msg}
+    entry = {"id": _guestbook_counter, "ts": now, "msg": safe_msg}
 
     try:
         with open("guestbook.jsonl", "a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     except Exception as e:
-        print(f"Failed writing guestbook: {e}")
-        return Response(content=json.dumps({"ok": False, "error": "write_failed"}), media_type="application/json", status_code=500)
+        print(f"Guestbook write error: {e}")
+        return json_response(False, error="write_failed", status_code=500)
 
-    # Persist the submission timestamp for rate limiting
     times.append(now)
-    ip_submissions[ip] = times
-
-    # Return the saved (possibly truncated) message and server-generated id
-    return Response(content=json.dumps({"ok": True, "ts": ts, "saved": msg, "id": cid}), media_type="application/json")
+    return json_response(True, ts=now, saved=msg, id=_guestbook_counter)
 
 app.mount("/", StaticFiles(directory=rooty), name="static")
 app.add_middleware(GZipMiddleware, minimum_size=500)
