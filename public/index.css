@@ -76,15 +76,6 @@ my-sidepage.active {
 
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-    /* 2. The Fade Mask */
-    /* This fades the container from solid to transparent starting at 70% height */
-    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 95%);
-    mask-image: linear-gradient(to bottom, black 70%, transparent 95%);
-
-    /* 3. Ensure the mask doesn't clip content weirdly */
-    mask-size: 100% 100%;
-    mask-repeat: no-repeat;
   }
 
   .sidebar {
