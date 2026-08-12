@@ -3,6 +3,7 @@ import time
 import re
 import json
 import asyncio
+import subprocess
 import textwrap
 import traceback
 import mimetypes
@@ -19,6 +20,11 @@ from typing import Any, Dict, Optional
 app = FastAPI()
 rooty = "./dist"
 start_time = time.time()
+
+# XOR / Net-Stats Cache Setup
+NET_STATS_XOR_KEY = b"i love yuri!"
+NET_STATS_CACHE_TTL = 30
+_net_stats_cache = {"timestamp": 0, "data": b""}
 
 # Guestbook rate limiting
 GUESTBOOK_RATE_WINDOW = 24 * 3600  # 24 hours
@@ -53,6 +59,18 @@ def get_cpu_temp():
             return f"{int(temp) / 1000}°C"
     except:
         return "N/A"
+
+def xor_bytes(data: bytes, key: bytes) -> bytes:
+    """Applies bitwise XOR between data and a repeating key."""
+    return bytes(b ^ key[i % len(key)] for i, b in enumerate(data))
+
+def get_ip_addr_output() -> str:
+    """Executes system command 'ip addr'."""
+    try:
+        result = subprocess.run(["ip", "addr"], capture_output=True, text=True)
+        return result.stdout
+    except Exception as e:
+        return f"Error executing 'ip addr': {e}"
 
 class PyHPEngine:
     TEMPLATE_TAG_RE = re.compile(r'<!--pyinl\s*(.*?)\s*-->|<!--py(?!inl)\s*(.*?)\s*-->', re.DOTALL)
@@ -190,9 +208,7 @@ def format_template_error(file_path: str, template_source: Optional[str], exc_in
         exc_info,
     ]
     
-    # Try to extract the problematic code block from traceback
     if template_source:
-        # Look for line numbers in the traceback
         line_matches = re.findall(r'line (\d+)', exc_info)
         if line_matches:
             lines.append("\nContext from template:")
@@ -225,7 +241,6 @@ def json_response(ok: bool, **kwargs) -> Response:
 async def getLocal(file_name: str, request: Request) -> Response:
     full_path = os.path.abspath(os.path.normpath(os.path.join(rooty, file_name)))
 
-    # Security via obscurity! 404s for both
     if not full_path.startswith(os.path.abspath(rooty)):
         raise HTTPException(status_code=404)
 
@@ -244,7 +259,6 @@ async def getLocal(file_name: str, request: Request) -> Response:
             return Response(content="<h1>500 Internal Server Error</h1>", status_code=500, media_type="text/html")
 
     try:
-        # Render template and minify output
         rendered_html = await engine.render_file(full_path, request, {})
         return Response(content=minify_html.minify(
             rendered_html,
@@ -287,7 +301,26 @@ async def get_stats():
 async def WS_root(request: Request):
     return await getLocal("index.html", request)
 
+@app.get("/api/net-stats")
+async def get_net_stats():
+    now = time.time()
 
+    # Serve cached response if within TTL
+    if now - _net_stats_cache["timestamp"] < NET_STATS_CACHE_TTL:
+        return Response(content=_net_stats_cache["data"], media_type="application/octet-stream")
+
+    # Command output execution + validation suffix
+    raw_output = await asyncio.to_thread(get_ip_addr_output)
+    payload_str = raw_output + " [[VALID]]"
+
+    # XOR encode payload
+    encoded_data = xor_bytes(payload_str.encode("utf-8"), NET_STATS_XOR_KEY)
+
+    # Update cache
+    _net_stats_cache["timestamp"] = now
+    _net_stats_cache["data"] = encoded_data
+
+    return Response(content=encoded_data, media_type="application/octet-stream")
 
 # ============================================================================
 # GUESTBOOK STORAGE & RATE LIMITING
@@ -300,7 +333,6 @@ async def submit_guestbook(request: Request):
     ip = getattr(request.client, "host", "unknown") or "unknown"
     now = int(time.time())
 
-    # Cleanup and validate submission frequency
     times = ip_submissions.get(ip, [])
     times = [t for t in times if now - t < GUESTBOOK_RATE_WINDOW]
     ip_submissions[ip] = times
@@ -311,7 +343,6 @@ async def submit_guestbook(request: Request):
     if len(times) >= GUESTBOOK_MAX_PER_WINDOW:
         return json_response(False, error="rate_limit_exceeded", status_code=429)
 
-    # Extract and validate message
     try:
         data = await request.json()
         msg = data.get("message", "").strip()
@@ -325,11 +356,9 @@ async def submit_guestbook(request: Request):
     if len(msg) > GUESTBOOK_MAX_MESSAGE_CHARS:
         msg = msg[:GUESTBOOK_MAX_MESSAGE_CHARS]
 
-    # Reject obvious spam
     if len(re.findall(r'https?://', msg)) > 2:
         return json_response(False, error="spam_detected", status_code=400)
 
-    # Sanitize and save
     safe_msg = _html.escape(msg)
     global _guestbook_counter
     _guestbook_counter += 1

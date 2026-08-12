@@ -178,8 +178,13 @@
           <!--pyinl sp_break -->
           <p>Go on, leave a message!</p>
           <hr />
-          <form id="guestbook-form" style="display:flex;align-items:center;gap:0.5rem">
-            <div style="flex:0 0 auto"><small id="gb-counter">0/100</small></div>
+          <form
+            id="guestbook-form"
+            style="display: flex; align-items: center; gap: 0.5rem"
+          >
+            <div style="flex: 0 0 auto">
+              <small id="gb-counter">0/100</small>
+            </div>
             <input
               id="guestbook-input"
               type="text"
@@ -188,9 +193,9 @@
               maxlength="100"
               aria-describedby="gb-counter"
               required
-              style="flex:1 1 auto"
+              style="flex: 1 1 auto"
             />
-            <button type="submit" style="flex:0 0 auto">Submit</button>
+            <button type="submit" style="flex: 0 0 auto">Submit</button>
           </form>
           <hr />
           <div id="guestbook-entries">
@@ -229,16 +234,14 @@
         <my-sidepage name="legal-about">
           <h1>Legal&#47;About</h1>
           <!--pyinl sp_break -->
-          <p>
-            Fonts:
-          </p>
+          <p>Fonts:</p>
           <ul>
             <li>
               <a target="_blank" href="https://fonts.google.com/specimen/Outfit"
                 >Outfit</a
               >
-              by Smartsheet Inc, Rodrigo Fuenzalida. Distributed by Google as part
-              of the Google Fonts collection.
+              by Smartsheet Inc, Rodrigo Fuenzalida. Distributed by Google as
+              part of the Google Fonts collection.
             </li>
             <li>
               <a
@@ -246,7 +249,8 @@
                 href="https://fonts.google.com/specimen/WDXL+Lubrifont+JP+N"
                 >WDXL Lubrifont JP N</a
               >
-              by NightFurySL2001. Distributed by Google as part of the Google Fonts collection.
+              by NightFurySL2001. Distributed by Google as part of the Google
+              Fonts collection.
             </li>
           </ul>
           <p>
@@ -280,8 +284,12 @@
           </ul>
           <p>
             Status:
-            <span id="server-stats"><!--pyinl (await get_stats())['status'] --></span>
+            <span id="server-stats"
+              ><!--pyinl (await get_stats())['status'] --></span
+            >
           </p>
+          <button onclick="netstats()">View Netstats</button>
+
           <br />
           <p>No copyright infringement intended.</p>
 
@@ -399,6 +407,34 @@
       function madotsuki() {
         let a = playSoundOneshot("sounds/madot.wav");
         a.volume = 0.5;
+      }
+
+      async function netstats() {
+        const key = prompt("*You find a pen and paper on the floor. It says \"Enter XOR Key\". What will you write?*");
+        if (!key) return;
+
+        try {
+          const response = await fetch("/api/net-stats");
+          const text = await response.text();
+
+          // Perform repeating-key XOR operation
+          let decoded = "";
+          for (let i = 0; i < text.length; i++) {
+            decoded += String.fromCharCode(
+              text.charCodeAt(i) ^ key.charCodeAt(i % key.length),
+            );
+          }
+
+          const marker = "[[VALID]]";
+          if (decoded.endsWith(marker)) {
+            const payload = decoded.slice(0, -marker.length);
+            alert(payload);
+          } else {
+            alert("*The paper turns into dust, and you now have a pen.*");
+          }
+        } catch (error) {
+          console.error("[netstats] Failed to fetch!!!:", error);
+        }
       }
 
       if (document.readyState === "loading") {
