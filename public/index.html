@@ -61,7 +61,6 @@
             ("projects", "Projects"),
             ("randoms", "Randoms"),
             ("guestbook", "Guestbook"),
-            ("favsongs", "Favorite Songs"),
             ("legal-about", "Legal/About"),
           ]
 
@@ -141,9 +140,10 @@
         <my-sidepage name="blogs">
           <h1>Blogs</h1>
           <!--pyinl sp_break -->
-          <p>7/12/26 - Hello! It's been a while. Just some housekeeping...</p>
-          <p>5/14/26 - Backend updates.</p>
-          <p>5/13/26 - Arguably many more things today!!</p>
+          <p>12/8/26 - Transferred to a new registrar!</p>
+          <p>12/7/26 - Hello! It's been a while. Just some housekeeping...</p>
+          <p>14/5/26 - Backend updates.</p>
+          <p>13/5/26 - Arguably many more things today!!</p>
           <p>
             5/12/26 - The engine is started. Welcome to
             <span t-thickunderline
@@ -224,65 +224,6 @@
                 print('<p id="guestbook-no-messages">No messages yet. Be the first one to leave a message!</p>')
             -->
           </div>
-        </my-sidepage>
-
-        <my-sidepage name="favsongs">
-          <h1>Favorite Songs</h1>
-          <style>
-            /* why the fuck here?? */
-            .song-card { border-bottom: 1px solid #ccc; padding: 10px 0; }
-          </style>
-          <!--pyinl sp_break -->
-          <!--py
-          sng = [
-            # song name, artist, notes, yt link
-            ("Queen Of Venus ft. Adachi Rei", "FLAVOR FOLEY", "Awesome album but this one is about LESBIAN SEX", "https://www.youtube.com/watch?v=EpbhsrYuQJ4"),
-            ("rawdog ft. Hayden", "FLAVOR FOLEY", "Here, this one is about GAY SEX!!", "https://www.youtube.com/watch?v=HsZQOXZbWkQ"),
-            ("Water The Rosees ft. GUMI", "FLAVOR FOLEY", "Divorce!!! Waow!!", "https://www.youtube.com/watch?v=NA3MJmcyPpE"),
-            ("Spoken For ft. Kasane Teto", "FLAVOR FOLEY", "Such a song makes you see that despite everything, it's still you.", "https://www.youtube.com/watch?v=LvYL8u4p-aM"),
-            ("POTETO CHIP ft. Kasane Teto", "ROMA (ROMALOID)", "Not just the song, but it seems that the artist is very warm!!", "https://www.youtube.com/watch?v=MMy7KXZPpyw"),
-            ("Human ft. SF-A2 Miki", "FLAVOR FOLEY", "You know, I might just be influenced by the amount of views, but this song is something that resonates with me. You know? \"Ettique in normalcy\"", "https://www.youtube.com/watch?v=hbuNxmAXdNk"),
-            ("INSOMNIA ft. Yi-Xi", "ROMA (ROMALOID)", "Feels like i'm time travelling back to 2010 songs, but this is a 2026 song..", "https://www.youtube.com/watch?v=9HDPGcRSRcA"),
-            ("It's Not Like I Like You!!", "Static-P", "Greatness?<br><p>@TheGamingGoose127: Top 10 tuff gym songs for big strong men</p>", "https://www.youtube.com/watch?v=tOzOD-82mW0"),
-            ("Goodbye Declaration", "Chinozo", "Eminem fails to match this artist.<br><code>local goodbye</code><br><code>-- Now goodbye has been declared!</code>", "https://www.youtube.com/watch?v=dHXC_ahjtEE"),
-            ("U.N. Owen Was Her", "ZUN", "Chaotic song but in my opinion, fits Flowey..?", "https://www.youtube.com/watch?v=8jJZA-O_B78"),
-            ("Marisa Stole The Precious Thing", "IOSYS", "Old ass song!! The entire album is awesome!!", "https://www.youtube.com/watch?v=shmAGOTo824"),
-            ("(Essay, not music) On The Heights Of Despair", "Horses", "One does not want to kill themselves, but wishes to likeminded with myself.", "https://www.youtube.com/watch?v=DNGXsbZHMMI"),
-            ("Cirno's Perfect Math Class", "IOSYS", "Also old ass song!! But newer than the next song somehow:", "https://www.youtube.com/watch?v=V_bQNPG2OyE"),
-            ("Eirin's Clinic That People Queue Up For", "IOSYS", "Still old. But newer than M.S.T.P.T? But in my opinion, the song sounds like a old lady singing!", "https://www.youtube.com/watch?v=HEn0o_UGnUQ"),
-            ("Rin-Chan now", "OwataP", "Lesbians? In this 2010s economy?", 'https://www.youtube.com/watch?v=_oS2aIhE2_U'),
-            ("Stop Nagging Me! ft. Akita Neru", "OwataP", "Bop. GOCHA GOCHA URUSAE!!", 'https://www.youtube.com/watch?v=-bt0IP16PZI'),
-            ("Onnanoko Ni Naritai (I wanna be a girl)", "Mafumafu", "Bop, and i'm not surviving the trans allegory allegations :)", "https://www.youtube.com/watch?v=ucbx9we6EHk"),
-            ("Your Reality", "Team Salvato", "Bop of suicide?", "https://www.youtube.com/watch?v=CAL4WMpBNs0"),
-            ("Kyu-kurarin ft. Kafu", "Iyowa", "ANOTHER bop of suicide? I mean, it's upbeat but if you know you know. :)", "https://www.youtube.com/watch?v=2b1IexhKPz4"),
-            ("Kawaikutegomen", "HoneyWorks", "Top ten songs for big manly gym bros", "https://www.youtube.com/watch?v=K4xLi8IF1FM"),
-            ("จังหวะหัวใจ (Jàng Wà Hǔajai)", "Bie Sukrit", "One asks why I like songs from the 00s to the 20s. Another sees 10 cakes!!<br>AbSOLUTELY CATCHY!!<br>Fun fact: did you know Bie was only 28 when this song came out? He's 40 as of 2026 and yet still looks young!", "https://www.youtube.com/watch?v=h_qjzGzsTqQ"),
-            ("อู้บ่จ้าง (Húu Bòr Jâang)", "Bie Sukrit", "One may see me weird for liking 3 different languages of songs and 10+ different genres, but another sees 10 cakes. :)", "https://www.youtube.com/watch?v=QrnWzqRYz_M"),
-            ("World Is Mine / ワールドイズマイン", "ryo (supercell)", "What the fuck? The oldest video of this song is 17 year old (as of 2026), but it still sounds like some fancy uncompressed WAV music. And that combined with that I thought this was a 2016 song.<br>I provided an okay-quality link because there's literally no definitive way to listen to the real thing! Someone hit me up", "https://www.youtube.com/watch?v=qrwVthk38b0"),
-            ("Lagtrain", "Inabakumori", "Quite awesome. I heard of this song since it released and I keep going back to it.", "https://www.youtube.com/watch?v=UnIhRpIT7nc"),
-          ]
-
-          for s in sng:
-            print(f'''
-            <article class="song-card">
-                <a href="{s[3]}" target="_blank">
-                    <h3 d-inline>{s[0]},</h3>
-                    <span>by {s[1]}</span>
-                </a>
-                <ul>
-                    <li>{s[2]}</li>
-                </ul>
-            </article>
-            ''')
-          -->
-          <!--pyinl sp_break-->
-          <p>
-            Here I provided YouTube links instead of Spotify links. Why? Because most people aren't logged in!
-            But it doesn't mean you should use YouTube (atleast, the default Web player) to listen to songs!!
-          </p>
-          <p>
-            All rights goes to the respective owners.
-          </p>
         </my-sidepage>
 
         <my-sidepage name="legal-about">
@@ -395,7 +336,7 @@
       </button>
 
       <div class="dock-content">
-        <span>Now Playing: Queen Of Venus, by FLAVOR FOLEY</span>
+        <span>Now Playing: Maid Factor</span>
       </div>
     </div>
 
