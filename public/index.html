@@ -166,7 +166,7 @@
           <p>
             Script bookmark:
             <a
-              href="javascript:(function(){let s=document.createElement('style');s.innerHTML='*{user-select:auto!important;-webkit-user-select:auto!important;}';document.head.appendChild(s);const b=(e)=>e.stopImmediatePropagation();['selectbegin','selectstart','contextmenu','copy'].forEach(t=>document.addEventListener(t,b,true));})();"
+              href="javascript:(function(){const k=e=>{const t=e.key?e.key.toLowerCase():'';if(t==='f12'||((e.ctrlKey||e.metaKey)&&(e.shiftKey&&(t==='i'||t==='j'||t==='c')||t==='u'||t==='c'))){e.stopImmediatePropagation()}};document.addEventListener('keydown',k,true);['selectbegin','selectstart','contextmenu','copy','cut','dragstart'].forEach(e=>document.addEventListener(e,t=>t.stopImmediatePropagation(),true));const s=document.createElement('style');s.innerHTML='*, *::before, *::after { user-select: text !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; pointer-events: auto !important; }';document.head.appendChild(s);const a=['onselectstart','oncontextmenu','oncopy','onkeydown','onkeyup','ondragstart'];a.forEach(e=>{window[e]=document[e]=null});document.querySelectorAll('*').forEach(e=>a.forEach(t=>e[t]=null))})();"
               target="_blank"
               >Bypass copy&paste restrictions</a
             >
